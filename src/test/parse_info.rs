@@ -7,7 +7,7 @@
 
 #[cfg(test)]
 mod passing {
-    use crate as domaininfo;
+    use crate as whoisthere;
 
     #[test]
     fn pidesign_dot_co_dot_uk() {
@@ -52,8 +52,7 @@ or hiding any or all of this notice and (C) exceeding query rate or volume
 limits. The data is provided on an 'as-is' basis and may lag behind the
 register. Access may be withdrawn or restricted at any time.
 ";
-        let domain_props =
-            domaininfo::whois::parse_whois_response(real_domain_name, real_whois_response);
+        let domain_props = whoisthere::parse_info(real_domain_name, real_whois_response);
         assert_eq!(domain_props.domain_name, "pidesign.co.uk");
         assert_eq!(domain_props.expiration_date, "2022-05-14T00:00:00Z");
         assert_eq!(domain_props.is_registered, true);
@@ -95,8 +94,7 @@ Access to WHOIS information provided by Internet Computer Bureau Ltd. ICB is pro
 
 All rights reserved. ICB reserves the right to modify these terms at any time. By submitting this query, you agree to abide by these policies
 ";
-        let domain_props =
-            domaininfo::whois::parse_whois_response(real_domain_name, real_whois_response);
+        let domain_props = whoisthere::parse_info(real_domain_name, real_whois_response);
         assert_eq!(domain_props.domain_name, "crates.io");
         assert_eq!(domain_props.expiration_date, "2023-01-22T08:28:29Z");
         assert_eq!(domain_props.is_registered, true);
@@ -141,8 +139,7 @@ address:      US
 created:      March 15 2017
 source:       ISNIC
 ";
-        let domain_props =
-            domaininfo::whois::parse_whois_response(real_domain_name, real_whois_response);
+        let domain_props = whoisthere::parse_info(real_domain_name, real_whois_response);
         assert_eq!(domain_props.domain_name, "site.is");
         assert_eq!(domain_props.expiration_date, "2021-03-14T00:00:00Z");
         assert_eq!(domain_props.is_registered, true);
@@ -159,7 +156,7 @@ source:       ISNIC
 
 #[cfg(test)]
 mod failing {
-    use crate as domaininfo;
+    use crate as whoisthere;
 
     #[test]
     fn unregistered_dot_gov() {
@@ -173,8 +170,7 @@ Please be advised that this whois server only contains information pertaining
 to the .GOV domain. For information for other domains please use the whois
 server at RS.INTERNIC.NET.
 ";
-        let domain_props =
-            domaininfo::whois::parse_whois_response(mock_domain_name, mock_whois_response);
+        let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
         assert_eq!(domain_props.domain_name, "unregistered.gov");
         assert_eq!(domain_props.expiration_date, "");
         assert_eq!(domain_props.is_registered, false);
@@ -190,8 +186,7 @@ Domain not found.
 Terms of Use: Donuts Inc. provides this Whois service for information purposes, and to assist persons in obtaining information about or related to a domain name registration record. Donuts does not guarantee its accuracy. Users accessing the Donuts Whois service agree to use the data only for lawful purposes, and under no circumstances may this data be used to: a) allow, enable, or otherwise support the transmission by e-mail, telephone, or facsimile of mass unsolicited, commercial advertising or solicitations to entities other than the registrar’s own existing customers and b) enable high volume, automated, electronic processes that send queries or data to the systems of Donuts or any ICANN-accredited registrar, except as reasonably necessary to register domain names or modify existing registrations. When using the Donuts Whois service, please consider the following: The Whois service is not a replacement for standard EPP commands to the SRS service. Whois is not considered authoritative for registered domain objects. The Whois service may be scheduled for downtime during production or OT&E maintenance periods. Queries to the Whois services are throttled. If too many queries are received from a single IP address within a specified time, the service will begin to reject further queries for a period of time to prevent disruption of Whois service access. Abuse of the Whois system through data mining is mitigated by detecting and limiting bulk query access from single sources. Where applicable, the presence of a [Non-Public Data] tag indicates that such data is not made publicly available due to applicable data privacy laws or requirements. Should you wish to contact the registrant, please refer to the Whois records available through the registrar URL listed above. Access to non-public data may be provided, upon request, where it can be reasonably confirmed that the requester holds a specific legitimate interest and a proper legal basis for accessing the withheld da
 ta. Access to this data can be requested by submitting a request via the form found at https://donuts.domains/about/policies/whois-layered-access/ Donuts Inc. reserves the right to modify these terms at any time. By submitting this query, you agree to abide by this policy.
 ";
-        let domain_props =
-            domaininfo::whois::parse_whois_response(mock_domain_name, mock_whois_response);
+        let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
         assert_eq!(domain_props.domain_name, "unregistered.social");
         assert_eq!(domain_props.expiration_date, "");
         assert_eq!(domain_props.is_registered, false);
@@ -210,8 +205,7 @@ ta. Access to this data can be requested by submitting a request via the form fo
 %
 % No entries found for query \"unregistered.is\".
 ";
-        let domain_props =
-            domaininfo::whois::parse_whois_response(mock_domain_name, mock_whois_response);
+        let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
         assert_eq!(domain_props.domain_name, "unregistered.is");
         assert_eq!(domain_props.expiration_date, "");
         assert_eq!(domain_props.is_registered, false);
