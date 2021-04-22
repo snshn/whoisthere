@@ -211,4 +211,15 @@ ta. Access to this data can be requested by submitting a request via the form fo
         assert_eq!(domain_props.is_registered, false);
         assert_eq!(domain_props.is_under_grace_period, false);
     }
+
+    #[test]
+    fn empty_input() {
+        let mock_domain_name = "";
+        let mock_whois_response = "";
+        let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
+        assert_eq!(domain_props.domain_name, "");
+        assert_eq!(domain_props.expiration_date, "");
+        assert_eq!(domain_props.is_registered, false);
+        assert_eq!(domain_props.is_under_grace_period, false);
+    }
 }

@@ -1,5 +1,3 @@
-extern crate chrono;
-
 use chrono::{DateTime, NaiveDate, NaiveDateTime, Utc};
 use regex::Regex;
 
@@ -14,7 +12,7 @@ pub fn parse_info(domain_name: &str, whois_info: &str) -> DomainProps {
     let mut whois_data = DomainProps {
         domain_name: String::from(domain_name),
         expiration_date: String::new(),
-        is_registered: true,
+        is_registered: false,
         is_under_grace_period: false,
     };
 
@@ -28,8 +26,7 @@ pub fn parse_info(domain_name: &str, whois_info: &str) -> DomainProps {
             || line_trimmed.starts_with("No match for")
             || line_trimmed.starts_with("% No entries found for query")
         {
-            whois_data.is_registered = false;
-            continue;
+            break;
         }
 
         // Parse expiration date
@@ -38,6 +35,7 @@ pub fn parse_info(domain_name: &str, whois_info: &str) -> DomainProps {
             for caps in re.captures_iter(line_trimmed) {
                 let result = caps.get(1).unwrap().as_str();
                 let datetime_utc = result.parse::<DateTime<Utc>>().unwrap();
+                whois_data.is_registered = true;
                 whois_data.expiration_date = format!("{:?}", datetime_utc);
             }
             continue;
@@ -48,6 +46,7 @@ pub fn parse_info(domain_name: &str, whois_info: &str) -> DomainProps {
                     NaiveDate::parse_from_str(caps.get(1).unwrap().as_str(), "%d-%B-%Y").unwrap();
                 let naive_datetime: NaiveDateTime = naive_date.and_hms(0, 0, 0);
                 let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
+                whois_data.is_registered = true;
                 whois_data.expiration_date = format!("{:?}", datetime_utc);
             }
             continue;
@@ -58,6 +57,7 @@ pub fn parse_info(domain_name: &str, whois_info: &str) -> DomainProps {
                     NaiveDate::parse_from_str(caps.get(1).unwrap().as_str(), "%B %d %Y").unwrap();
                 let naive_datetime: NaiveDateTime = naive_date.and_hms(0, 0, 0);
                 let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
+                whois_data.is_registered = true;
                 whois_data.expiration_date = format!("{:?}", datetime_utc);
             }
             continue;
