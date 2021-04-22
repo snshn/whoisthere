@@ -1,1 +1,1 @@
-mod whois;
+mod parse_info;
