@@ -62,6 +62,18 @@ pub fn parse_info(domain_name: &str, whois_info: &str) -> DomainProps {
             }
             continue;
         }
+
+        // Parse status
+        if line_trimmed.starts_with("Domain Status:") {
+            let re = Regex::new(r"Domain Status:\s+(.*)").unwrap();
+            for caps in re.captures_iter(line_trimmed) {
+                let result = caps.get(1).unwrap().as_str();
+                if result == "redemptionPeriod https://icann.org/epp#redemptionPeriod" {
+                    whois_data.is_under_grace_period = true;
+                }
+            }
+            continue;
+        }
     }
 
     // TODO: parse more outputs (e.g. registrar)
