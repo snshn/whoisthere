@@ -16,14 +16,6 @@ lint:
 	@cargo fmt --all --
 .PHONY: lint
 
-install:
-	@cargo install --force --locked --path .
-.PHONY: install
-
-uninstall:
-	@cargo uninstall
-.PHONY: uninstall
-
 clean:
 	@cargo clean
 .PHONY: clean
