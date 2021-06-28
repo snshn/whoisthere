@@ -2,7 +2,9 @@
 name = "whoisthere"
 version = "0.1.2"
 authors = ["Sunshine <sunshine@uberspace.net>"]
+description = "WHOIS data parsing crate"
 edition = "2018"
+license = "CC0-1.0"
 
 [dependencies]
 chrono = "0.4.19"
