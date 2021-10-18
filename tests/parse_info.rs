@@ -7,92 +7,33 @@
 
 #[cfg(test)]
 mod passing {
+    use std::fs;
+    use std::path::Path;
+
     #[test]
-    fn pidesign_dot_co_dot_uk() {
-        let real_domain_name = "pidesign.co.uk";
-        let real_whois_response = "\
+    fn somesite_co_uk() {
+        let domain_name: &str = "somesite.co.uk";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
-    Domain name:
-        pidesign.co.uk
-
-    Data validation:
-        Nominet was able to match the registrant's name and address against a 3rd party data source on 13-Jun-2014
-
-    Registrar:
-        Paragon Internet Group Ltd t/a Tsohost [Tag = UKWEBHOSTING]
-        URL: http://www.tsohost.co.uk
-
-    Relevant dates:
-        Registered on: 14-May-1998
-        Expiry date:  14-May-2022
-        Last updated:  14-May-2020
-
-    Registration status:
-        Registered until expiry date.
-
-    Name servers:
-        kip.ns.cloudflare.com
-        uma.ns.cloudflare.com
-
-    WHOIS lookup made at 07:59:17 10-Feb-2021
-
---
-This WHOIS information is provided for free by Nominet UK the central registry
-for .uk domain names. This information and the .uk WHOIS are:
-
-    Copyright Nominet UK 1996 - 2021.
-
-You may not access the .uk WHOIS or use any data from it except as permitted
-by the terms of use available in full at https://www.nominet.uk/whoisterms,
-which includes restrictions on: (A) use of the data for advertising, or its
-repackaging, recompilation, redistribution or reuse (B) obscuring, removing
-or hiding any or all of this notice and (C) exceeding query rate or volume
-limits. The data is provided on an 'as-is' basis and may lag behind the
-register. Access may be withdrawn or restricted at any time.
-";
-        let domain_props = whoisthere::parse_info(real_domain_name, real_whois_response);
-        assert_eq!(domain_props.domain_name, "pidesign.co.uk");
+        assert_eq!(domain_props.domain_name, "somesite.co.uk");
         assert_eq!(domain_props.expiration_date, "2022-05-14T00:00:00Z");
         assert_eq!(domain_props.is_registered, true);
         assert_eq!(domain_props.is_under_grace_period, false);
     }
 
     #[test]
-    fn crates_dot_io() {
-        let real_domain_name = "crates.io";
-        let real_whois_response = "\
-Domain Name: CRATES.IO
-Registry Domain ID: D503300000040513565-LRMS
-Registrar WHOIS Server: whois.gandi.net
-Registrar URL: https://www.gandi.net/whois
-Updated Date: 2020-08-13T16:28:56Z
-Creation Date: 2014-01-22T08:28:29Z
-Registry Expiry Date: 2023-01-22T08:28:29Z
-Registrar Registration Expiration Date:
-Registrar: Gandi SAS
-Registrar IANA ID: 81
-Registrar Abuse Contact Email: abuse@support.gandi.net
-Registrar Abuse Contact Phone: +33.170377661
-Reseller:
-Domain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited
-Registrant Organization:
-Registrant State/Province: OR
-Registrant Country: US
-Name Server: NS-1543.AWSDNS-00.CO.UK
-Name Server: NS-217.AWSDNS-27.COM
-Name Server: NS-1064.AWSDNS-05.ORG
-Name Server: NS-817.AWSDNS-38.NET
-DNSSEC: unsigned
+    fn crates_io() {
+        let domain_name = "crates.io";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
->>> Last update of WHOIS database: 2021-02-09T22:05:38Z <<<
-
-For more information on Whois status codes, please visit https://icann.org/epp
-
-Access to WHOIS information provided by Internet Computer Bureau Ltd. ICB is provided to assist persons in determining the contents of a domain name registration record in the ICB registry database. The data in this record is provided by ICB for informational purposes only, and ICB does not guarantee its accuracy. This service is intended only for query-based access. You agree that you will use this data only for lawful purposes and that, under no circumstances will you use this data to(i) allow, enable, or otherwise support the transmission by e-mail, telephone, facsimile or other electronic means of mass, unsolicited, commercial advertising or solicitations to entities other than the data recipient's own existing customers; or (ii) enable high volume, automated, electronic processes that send queries or data to the systems of Registry Operator, a Registrar, or ICB or its services providers except as reasonably necessary to register domain names or modify existing registrations. UK privacy laws limit the scope of information permitted for certain public access.  Therefore, concerns regarding abusive use of domain registrations in the ICB registry should be directed to either (a) the Registrar of Record as indicated in the WHOIS output, or (b) the ICB anti-abuse department at abuse@icbregistry.info.
-
-All rights reserved. ICB reserves the right to modify these terms at any time. By submitting this query, you agree to abide by these policies
-";
-        let domain_props = whoisthere::parse_info(real_domain_name, real_whois_response);
         assert_eq!(domain_props.domain_name, "crates.io");
         assert_eq!(domain_props.expiration_date, "2023-01-22T08:28:29Z");
         assert_eq!(domain_props.is_registered, true);
@@ -100,44 +41,14 @@ All rights reserved. ICB reserves the right to modify these terms at any time. B
     }
 
     #[test]
-    fn site_dot_is() {
-        let real_domain_name = "site.is";
-        let real_whois_response = "\
-% This is the ISNIC Whois server.
-%
-% Rights restricted by copyright.
-% See https://www.isnic.is/en/about/copyright
+    fn site_is() {
+        let domain_name = "site.is";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
-domain:       site.is
-registrant:   ES5722-IS
-admin-c:      ES206-IS
-tech-c:       ES206-IS
-zone-c:       JQ9-IS
-billing-c:    ES206-IS
-nserver:      cdns1.interserver.net
-nserver:      cdns2.interserver.net
-nserver:      cdns3.interserver.net
-dnssec:       unsigned delegation
-created:      March 14 2013
-expires:      March 14 2021
-source:       ISNIC
-
-nic-hdl:      ES5722-IS
-address:      IS
-created:      March 14 2013
-source:       ISNIC
-
-nic-hdl:      ES206-IS
-address:      IS
-created:      December 16 2010
-source:       ISNIC
-
-nic-hdl:      JQ9-IS
-address:      US
-created:      March 15 2017
-source:       ISNIC
-";
-        let domain_props = whoisthere::parse_info(real_domain_name, real_whois_response);
         assert_eq!(domain_props.domain_name, "site.is");
         assert_eq!(domain_props.expiration_date, "2021-03-14T00:00:00Z");
         assert_eq!(domain_props.is_registered, true);
@@ -154,19 +65,18 @@ source:       ISNIC
 
 #[cfg(test)]
 mod failing {
-    #[test]
-    fn unregistered_dot_gov() {
-        let mock_domain_name = "unregistered.gov";
-        let mock_whois_response = "\
-% DOTGOV WHOIS Server ready
-No match for \"UNREGISTERED.GOV\".
->>> Last update of whois database: 2021-02-02T10:32:47Z <<<
+    use std::fs;
+    use std::path::Path;
 
-Please be advised that this whois server only contains information pertaining
-to the .GOV domain. For information for other domains please use the whois
-server at RS.INTERNIC.NET.
-";
-        let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
+    #[test]
+    fn unregistered_gov() {
+        let domain_name = "unregistered.gov";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+
         assert_eq!(domain_props.domain_name, "unregistered.gov");
         assert_eq!(domain_props.expiration_date, "");
         assert_eq!(domain_props.is_registered, false);
@@ -174,15 +84,14 @@ server at RS.INTERNIC.NET.
     }
 
     #[test]
-    fn unregistered_dot_social() {
-        let mock_domain_name = "unregistered.social";
-        let mock_whois_response = "\
-Domain not found.
+    fn unregistered_social() {
+        let domain_name = "unregistered.social";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
-Terms of Use: Donuts Inc. provides this Whois service for information purposes, and to assist persons in obtaining information about or related to a domain name registration record. Donuts does not guarantee its accuracy. Users accessing the Donuts Whois service agree to use the data only for lawful purposes, and under no circumstances may this data be used to: a) allow, enable, or otherwise support the transmission by e-mail, telephone, or facsimile of mass unsolicited, commercial advertising or solicitations to entities other than the registrar’s own existing customers and b) enable high volume, automated, electronic processes that send queries or data to the systems of Donuts or any ICANN-accredited registrar, except as reasonably necessary to register domain names or modify existing registrations. When using the Donuts Whois service, please consider the following: The Whois service is not a replacement for standard EPP commands to the SRS service. Whois is not considered authoritative for registered domain objects. The Whois service may be scheduled for downtime during production or OT&E maintenance periods. Queries to the Whois services are throttled. If too many queries are received from a single IP address within a specified time, the service will begin to reject further queries for a period of time to prevent disruption of Whois service access. Abuse of the Whois system through data mining is mitigated by detecting and limiting bulk query access from single sources. Where applicable, the presence of a [Non-Public Data] tag indicates that such data is not made publicly available due to applicable data privacy laws or requirements. Should you wish to contact the registrant, please refer to the Whois records available through the registrar URL listed above. Access to non-public data may be provided, upon request, where it can be reasonably confirmed that the requester holds a specific legitimate interest and a proper legal basis for accessing the withheld da
-ta. Access to this data can be requested by submitting a request via the form found at https://donuts.domains/about/policies/whois-layered-access/ Donuts Inc. reserves the right to modify these terms at any time. By submitting this query, you agree to abide by this policy.
-";
-        let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
         assert_eq!(domain_props.domain_name, "unregistered.social");
         assert_eq!(domain_props.expiration_date, "");
         assert_eq!(domain_props.is_registered, false);
@@ -190,68 +99,14 @@ ta. Access to this data can be requested by submitting a request via the form fo
     }
 
     #[test]
-    fn expired_but_restorable_dot_com() {
-        let mock_domain_name = "expired.com";
-        let mock_whois_response = "\
-   Domain Name: EXPIRED.COM
-   Registry Domain ID: 2010582679_DOMAIN_COM-VRSN
-   Registrar WHOIS Server: whois.gandi.net
-   Registrar URL: http://www.gandi.net
-   Updated Date: 2021-04-22T15:12:24Z
-   Creation Date: 2016-03-09T03:02:37Z
-   Registry Expiry Date: 2021-04-09T03:02:37Z
-   Registrar: Gandi SAS
-   Registrar IANA ID: 81
-   Registrar Abuse Contact Email: abuse@support.gandi.net
-   Registrar Abuse Contact Phone: +33.170377661
-   Domain Status: clientHold https://icann.org/epp#clientHold
-   Domain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited
-   Domain Status: redemptionPeriod https://icann.org/epp#redemptionPeriod
-   Name Server: NS-173-A.GANDI.NET
-   Name Server: NS-181-B.GANDI.NET
-   Name Server: NS-234-C.GANDI.NET
-   DNSSEC: unsigned
-   URL of the ICANN Whois Inaccuracy Complaint Form: https://www.icann.org/wicf/
->>> Last update of whois database: 2021-04-23T01:45:07Z <<<
+    fn expired_com() {
+        let domain_name = "expired.com";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(&domain_name, &whois_response);
 
-For more information on Whois status codes, please visit https://icann.org/epp
-
-NOTICE: The expiration date displayed in this record is the date the
-registrar's sponsorship of the domain name registration in the registry is
-currently set to expire. This date does not necessarily reflect the expiration
-date of the domain name registrant's agreement with the sponsoring
-registrar.  Users may consult the sponsoring registrar's Whois database to
-view the registrar's reported date of expiration for this registration.
-
-TERMS OF USE: You are not authorized to access or query our Whois
-database through the use of electronic processes that are high-volume and
-automated except as reasonably necessary to register domain names or
-modify existing registrations; the Data in VeriSign Global Registry
-Services' (\"VeriSign\") Whois database is provided by VeriSign for
-information purposes only, and to assist persons in obtaining information
-about or related to a domain name registration record. VeriSign does not
-guarantee its accuracy. By submitting a Whois query, you agree to abide
-by the following terms of use: You agree that you may use this Data only
-for lawful purposes and that under no circumstances will you use this Data
-to: (1) allow, enable, or otherwise support the transmission of mass
-unsolicited, commercial advertising or solicitations via e-mail, telephone,
-or facsimile; or (2) enable high volume, automated, electronic processes
-that apply to VeriSign (or its computer systems). The compilation,
-repackaging, dissemination or other use of this Data is expressly
-prohibited without the prior written consent of VeriSign. You agree not to
-use electronic processes that are automated and high-volume to access or
-query the Whois database except as reasonably necessary to register
-domain names or modify existing registrations. VeriSign reserves the right
-to restrict your access to the Whois database in its sole discretion to ensure
-operational stability.  VeriSign may restrict or terminate your access to the
-Whois database for failure to abide by these terms of use. VeriSign
-reserves the right to modify these terms at any time.
-
-The Registry database contains ONLY .COM, .NET, .EDU domains and
-Registrars.
-
-";
-        let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
         assert_eq!(domain_props.domain_name, "expired.com");
         assert_eq!(domain_props.expiration_date, "2021-04-09T03:02:37Z");
         assert_eq!(domain_props.is_registered, true);
@@ -259,18 +114,14 @@ Registrars.
     }
 
     #[test]
-    fn unregistered_dot_is() {
-        let mock_domain_name = "unregistered.is";
-        let mock_whois_response = "\
-% This is the ISNIC Whois server.
-%
-% Rights restricted by copyright.
-% See https://www.isnic.is/en/about/copyright
+    fn unregistered_is() {
+        let domain_name = "unregistered.is";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
-%
-% No entries found for query \"unregistered.is\".
-";
-        let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
         assert_eq!(domain_props.domain_name, "unregistered.is");
         assert_eq!(domain_props.expiration_date, "");
         assert_eq!(domain_props.is_registered, false);
@@ -278,10 +129,11 @@ Registrars.
     }
 
     #[test]
-    fn empty_input() {
+    fn empty() {
         let mock_domain_name = "";
         let mock_whois_response = "";
         let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
+
         assert_eq!(domain_props.domain_name, "");
         assert_eq!(domain_props.expiration_date, "");
         assert_eq!(domain_props.is_registered, false);

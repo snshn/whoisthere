@@ -1,0 +1,33 @@
+% This is the ISNIC Whois server.
+%
+% Rights restricted by copyright.
+% See https://www.isnic.is/en/about/copyright
+
+domain:       site.is
+registrant:   ES5722-IS
+admin-c:      ES206-IS
+tech-c:       ES206-IS
+zone-c:       JQ9-IS
+billing-c:    ES206-IS
+nserver:      cdns1.interserver.net
+nserver:      cdns2.interserver.net
+nserver:      cdns3.interserver.net
+dnssec:       unsigned delegation
+created:      March 14 2013
+expires:      March 14 2021
+source:       ISNIC
+
+nic-hdl:      ES5722-IS
+address:      IS
+created:      March 14 2013
+source:       ISNIC
+
+nic-hdl:      ES206-IS
+address:      IS
+created:      December 16 2010
+source:       ISNIC
+
+nic-hdl:      JQ9-IS
+address:      US
+created:      March 15 2017
+source:       ISNIC
