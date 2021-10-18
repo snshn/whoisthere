@@ -7,8 +7,6 @@
 
 #[cfg(test)]
 mod passing {
-    use crate as whoisthere;
-
     #[test]
     fn pidesign_dot_co_dot_uk() {
         let real_domain_name = "pidesign.co.uk";
@@ -156,8 +154,6 @@ source:       ISNIC
 
 #[cfg(test)]
 mod failing {
-    use crate as whoisthere;
-
     #[test]
     fn unregistered_dot_gov() {
         let mock_domain_name = "unregistered.gov";

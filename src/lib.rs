@@ -81,6 +81,3 @@ pub fn parse_info(domain_name: &str, whois_info: &str) -> DomainProps {
 
     return whois_data;
 }
-
-#[cfg(test)]
-pub mod test;

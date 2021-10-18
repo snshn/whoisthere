@@ -3,9 +3,11 @@ name = "whoisthere"
 version = "0.1.2"
 authors = ["Sunshine <sunshine@uberspace.net>"]
 description = "WHOIS data parsing crate"
+homepage = "https://github.com/snshn/whoisthere"
+repository = "https://github.com/snshn/whoisthere"
 edition = "2018"
 license = "CC0-1.0"
 
 [dependencies]
 chrono = "0.4.19"
-regex = "1.4.5"
+regex = "1.5.4"
