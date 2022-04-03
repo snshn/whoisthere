@@ -41,6 +41,21 @@ mod passing {
     }
 
     #[test]
+    fn registered_rs() {
+        let domain_name = "registered.rs";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "registered.rs");
+        assert_eq!(domain_props.expiration_date, "2023-03-24T19:25:04Z");
+        assert_eq!(domain_props.is_registered, true);
+        assert_eq!(domain_props.is_under_grace_period, false);
+    }
+
+    #[test]
     fn site_is() {
         let domain_name = "site.is";
         let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);

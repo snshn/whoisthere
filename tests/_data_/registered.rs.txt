@@ -1,0 +1,38 @@
+
+% The data in the Whois database are provided by RNIDS
+% for information purposes only and to assist persons in obtaining
+% information about or related to a domain name registration record. 
+% Data in the database are created by registrants and we do not guarantee 
+% their accuracy. We reserve the right to remove access 
+% for entities abusing the data, without notice.
+% All timestamps are given in Serbian local time. 
+%
+Domain name: registered.rs
+Domain status: Active https://www.rnids.rs/en/domain-name-status-codes#Active
+Registration date: 24.03.2014 19:25:04
+Modification date: 03.03.2022 08:27:24
+Expiration date: 24.03.2023 19:25:04
+Confirmed: 24.03.2014 19:25:04
+Registrar: NINET Company d.o.o.
+
+
+Registrant: Individual
+
+Administrative contact: Individual
+
+Technical contact: NETIM
+Address: 165 avenue de bretagne, Lille, France
+Postal Code: 59160
+ID Number: 0
+Tax ID: 
+
+
+DNS: ns-1937.awsdns-50.co.uk - 
+DNS: ns-314.awsdns-39.com - 
+DNS: ns-779.awsdns-33.net - 
+DNS: ns-1397.awsdns-46.org - 
+
+
+DNSSEC signed: no
+
+Whois Timestamp: 03.04.2022 03:35:45
