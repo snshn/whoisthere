@@ -61,6 +61,19 @@ pub fn parse_info(domain_name: &str, whois_info: &str) -> DomainProps {
                 whois_data.expiration_date = format!("{:?}", datetime_utc);
             }
             continue;
+        } else if line_trimmed.starts_with("Expiration date:") {
+            let re = Regex::new(r"Expiration date:\s+(.*)").unwrap();
+            for caps in re.captures_iter(line_trimmed) {
+                let naive_datetime = NaiveDateTime::parse_from_str(
+                    caps.get(1).unwrap().as_str(),
+                    "%d.%m.%Y %H:%M:%S",
+                )
+                .unwrap();
+                let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
+                whois_data.is_registered = true;
+                whois_data.expiration_date = format!("{:?}", datetime_utc);
+            }
+            continue;
         }
 
         // Parse status
