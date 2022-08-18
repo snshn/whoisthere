@@ -21,7 +21,10 @@ mod passing {
 
         assert_eq!(domain_props.domain_name, "somesite.co.uk");
         assert_eq!(domain_props.expiration_date, "2022-05-14T00:00:00Z");
-        assert_eq!(domain_props.registrar, None);
+        assert_eq!(
+            domain_props.registrar,
+            Some("Paragon Internet Group Ltd t/a Tsohost [Tag = UKWEBHOSTING]".to_string())
+        );
         assert_eq!(domain_props.is_registered, true);
         assert_eq!(domain_props.is_under_grace_period, false);
     }

@@ -102,6 +102,7 @@ pub fn parse_info(domain_name: &str, whois_info: &str) -> DomainProps {
         // Parse registrar name
         if line.starts_with("Registrar:") || line.starts_with("registrar:") {
             let re = Regex::new(r"(?i)Registrar:\s+(.*)").unwrap();
+            // TODO: scan following lines, use struct { name, url }
             for caps in re.captures_iter(line) {
                 let result = caps.get(1).unwrap().as_str();
                 whois_data.registrar = Some(result.to_string());
