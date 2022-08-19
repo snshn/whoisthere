@@ -19,7 +19,7 @@ let domain_info = parse_info(domain_name, &whois_response);
 
 assert_eq!(domain_info.domain_name, "somesite.co.uk");
 assert_eq!(domain_info.expiration_date, "2022-05-14T00:00:00Z");
-assert_eq!(domain_info.registrar, Some("Paragon Internet Group Ltd t/a Tsohost [Tag = UKWEBHOSTING]".to_string()));
+assert_eq!(domain_info.registrar, Some("Paragon Internet Group Ltd t/a Tsohost [Tag = UKWEBHOSTING]"));
 assert_eq!(domain_info.is_registered, true);
 assert_eq!(domain_info.is_under_grace_period, false);
 ```
