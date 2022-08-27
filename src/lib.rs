@@ -10,8 +10,15 @@ pub struct DomainProps<'t> {
 }
 
 pub fn parse_datetime(datetime: &str) -> Option<String> {
-    let re = Regex::new(r"\d{2}-(January|February|March|April|May|June|July|August|September|October|November|December)-\d{4}").unwrap();
-    if re.is_match(datetime) {
+    let re_bdy = Regex::new(r"(January|February|March|April|May|June|July|August|September|October|November|December) \d{2} \d{4}").unwrap();
+    let re_dby = Regex::new(r"\d{2}-(January|February|March|April|May|June|July|August|September|October|November|December)-\d{4}").unwrap();
+
+    if re_bdy.is_match(datetime) {
+        let naive_date = NaiveDate::parse_from_str(datetime, "%B %d %Y").unwrap();
+        let naive_datetime: NaiveDateTime = naive_date.and_hms(0, 0, 0);
+        let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
+        return Some(datetime_utc.to_rfc3339());
+    } else if re_dby.is_match(datetime) {
         let naive_date = NaiveDate::parse_from_str(datetime, "%d-%B-%Y").unwrap();
         let naive_datetime: NaiveDateTime = naive_date.and_hms(0, 0, 0);
         let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
@@ -64,12 +71,8 @@ pub fn parse_info<'t>(domain_name: &'t str, whois_info: &'t str) -> DomainProps<
         } else if line_trimmed.starts_with("expires:") {
             let re = Regex::new(r"\s*expires:\s+(.*)").unwrap();
             for caps in re.captures_iter(line) {
-                let naive_date =
-                    NaiveDate::parse_from_str(caps.get(1).unwrap().as_str(), "%B %d %Y").unwrap();
-                let naive_datetime: NaiveDateTime = naive_date.and_hms(0, 0, 0);
-                let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
                 whois_data.is_registered = true;
-                whois_data.expiration_date = Some(datetime_utc.to_rfc3339());
+                whois_data.expiration_date = parse_datetime(caps.get(1).unwrap().as_str());
             }
             continue;
         } else if line_trimmed.starts_with("Expiration date:") {
