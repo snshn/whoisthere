@@ -20,7 +20,14 @@ mod passing {
         let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "somesite.co.uk");
-        assert_eq!(domain_props.expiration_date, "2022-05-14T00:00:00Z");
+        assert_eq!(
+            domain_props.expiration_date,
+            Some("2022-05-14T00:00:00+00:00".to_string())
+        );
+        // assert_eq!(
+        //     domain_props.registrar,
+        //     Some("Paragon Internet Group Ltd t/a Tsohost [Tag = UKWEBHOSTING]")
+        // );
         assert_eq!(domain_props.is_registered, true);
         assert_eq!(domain_props.is_under_grace_period, false);
     }
@@ -35,7 +42,11 @@ mod passing {
         let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "crates.io");
-        assert_eq!(domain_props.expiration_date, "2023-01-22T08:28:29Z");
+        assert_eq!(
+            domain_props.expiration_date,
+            Some("2023-01-22T08:28:29+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, Some("Gandi SAS"));
         assert_eq!(domain_props.is_registered, true);
         assert_eq!(domain_props.is_under_grace_period, false);
     }
@@ -50,7 +61,11 @@ mod passing {
         let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "registered.rs");
-        assert_eq!(domain_props.expiration_date, "2023-03-24T19:25:04Z");
+        assert_eq!(
+            domain_props.expiration_date,
+            Some("2023-03-24T19:25:04+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, Some("NINET Company d.o.o."));
         assert_eq!(domain_props.is_registered, true);
         assert_eq!(domain_props.is_under_grace_period, false);
     }
@@ -65,7 +80,30 @@ mod passing {
         let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "site.is");
-        assert_eq!(domain_props.expiration_date, "2021-03-14T00:00:00Z");
+        assert_eq!(
+            domain_props.expiration_date,
+            Some("2021-03-14T00:00:00+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, None);
+        assert_eq!(domain_props.is_registered, true);
+        assert_eq!(domain_props.is_under_grace_period, false);
+    }
+
+    #[test]
+    fn yandex_ru() {
+        let domain_name = "yandex.ru";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "yandex.ru");
+        assert_eq!(
+            domain_props.expiration_date,
+            Some("2022-09-30T21:00:00+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, Some("RU-CENTER-RU"));
         assert_eq!(domain_props.is_registered, true);
         assert_eq!(domain_props.is_under_grace_period, false);
     }
@@ -93,7 +131,7 @@ mod failing {
         let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.gov");
-        assert_eq!(domain_props.expiration_date, "");
+        assert_eq!(domain_props.expiration_date, None);
         assert_eq!(domain_props.is_registered, false);
         assert_eq!(domain_props.is_under_grace_period, false);
     }
@@ -108,7 +146,7 @@ mod failing {
         let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.social");
-        assert_eq!(domain_props.expiration_date, "");
+        assert_eq!(domain_props.expiration_date, None);
         assert_eq!(domain_props.is_registered, false);
         assert_eq!(domain_props.is_under_grace_period, false);
     }
@@ -123,7 +161,10 @@ mod failing {
         let domain_props = whoisthere::parse_info(&domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "expired.com");
-        assert_eq!(domain_props.expiration_date, "2021-04-09T03:02:37Z");
+        assert_eq!(
+            domain_props.expiration_date,
+            Some("2021-04-09T03:02:37+00:00".to_string())
+        );
         assert_eq!(domain_props.is_registered, true);
         assert_eq!(domain_props.is_under_grace_period, true);
     }
@@ -138,7 +179,7 @@ mod failing {
         let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.is");
-        assert_eq!(domain_props.expiration_date, "");
+        assert_eq!(domain_props.expiration_date, None);
         assert_eq!(domain_props.is_registered, false);
         assert_eq!(domain_props.is_under_grace_period, false);
     }
@@ -150,7 +191,7 @@ mod failing {
         let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
 
         assert_eq!(domain_props.domain_name, "");
-        assert_eq!(domain_props.expiration_date, "");
+        assert_eq!(domain_props.expiration_date, None);
         assert_eq!(domain_props.is_registered, false);
         assert_eq!(domain_props.is_under_grace_period, false);
     }
