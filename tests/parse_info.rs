@@ -10,6 +10,8 @@ mod passing {
     use std::fs;
     use std::path::Path;
 
+    use whoisthere::DomainPropStatusFlag;
+
     #[test]
     fn somesite_co_uk() {
         let domain_name: &str = "somesite.co.uk";
@@ -29,7 +31,7 @@ mod passing {
         //     Some("Paragon Internet Group Ltd t/a Tsohost [Tag = UKWEBHOSTING]")
         // );
         assert_eq!(domain_props.is_registered, true);
-        assert_eq!(domain_props.is_under_grace_period, false);
+        assert_eq!(domain_props.status.flag, DomainPropStatusFlag::Unknown);
     }
 
     #[test]
@@ -48,7 +50,7 @@ mod passing {
         );
         assert_eq!(domain_props.registrar, Some("Gandi SAS"));
         assert_eq!(domain_props.is_registered, true);
-        assert_eq!(domain_props.is_under_grace_period, false);
+        assert_eq!(domain_props.status.flag, DomainPropStatusFlag::Unknown);
     }
 
     #[test]
@@ -67,7 +69,7 @@ mod passing {
         );
         assert_eq!(domain_props.registrar, Some("NINET Company d.o.o."));
         assert_eq!(domain_props.is_registered, true);
-        assert_eq!(domain_props.is_under_grace_period, false);
+        assert_eq!(domain_props.status.flag, DomainPropStatusFlag::Unknown);
     }
 
     #[test]
@@ -86,7 +88,7 @@ mod passing {
         );
         assert_eq!(domain_props.registrar, None);
         assert_eq!(domain_props.is_registered, true);
-        assert_eq!(domain_props.is_under_grace_period, false);
+        assert_eq!(domain_props.status.flag, DomainPropStatusFlag::Unknown);
     }
 
     #[test]
@@ -105,7 +107,7 @@ mod passing {
         );
         assert_eq!(domain_props.registrar, Some("RU-CENTER-RU"));
         assert_eq!(domain_props.is_registered, true);
-        assert_eq!(domain_props.is_under_grace_period, false);
+        assert_eq!(domain_props.status.flag, DomainPropStatusFlag::Unknown);
     }
 }
 
@@ -121,6 +123,8 @@ mod failing {
     use std::fs;
     use std::path::Path;
 
+    use whoisthere::DomainPropStatusFlag;
+
     #[test]
     fn unregistered_gov() {
         let domain_name = "unregistered.gov";
@@ -133,7 +137,7 @@ mod failing {
         assert_eq!(domain_props.domain_name, "unregistered.gov");
         assert_eq!(domain_props.expiration_date, None);
         assert_eq!(domain_props.is_registered, false);
-        assert_eq!(domain_props.is_under_grace_period, false);
+        assert_eq!(domain_props.status.flag, DomainPropStatusFlag::Unknown);
     }
 
     #[test]
@@ -148,7 +152,7 @@ mod failing {
         assert_eq!(domain_props.domain_name, "unregistered.social");
         assert_eq!(domain_props.expiration_date, None);
         assert_eq!(domain_props.is_registered, false);
-        assert_eq!(domain_props.is_under_grace_period, false);
+        assert_eq!(domain_props.status.flag, DomainPropStatusFlag::Unknown);
     }
 
     #[test]
@@ -166,7 +170,7 @@ mod failing {
             Some("2021-04-09T03:02:37+00:00".to_string())
         );
         assert_eq!(domain_props.is_registered, true);
-        assert_eq!(domain_props.is_under_grace_period, true);
+        assert_eq!(domain_props.status.flag, DomainPropStatusFlag::GracePeriod);
     }
 
     #[test]
@@ -181,7 +185,7 @@ mod failing {
         assert_eq!(domain_props.domain_name, "unregistered.is");
         assert_eq!(domain_props.expiration_date, None);
         assert_eq!(domain_props.is_registered, false);
-        assert_eq!(domain_props.is_under_grace_period, false);
+        assert_eq!(domain_props.status.flag, DomainPropStatusFlag::Unknown);
     }
 
     #[test]
@@ -193,6 +197,6 @@ mod failing {
         assert_eq!(domain_props.domain_name, "");
         assert_eq!(domain_props.expiration_date, None);
         assert_eq!(domain_props.is_registered, false);
-        assert_eq!(domain_props.is_under_grace_period, false);
+        assert_eq!(domain_props.status.flag, DomainPropStatusFlag::Unknown);
     }
 }
