@@ -49,6 +49,12 @@ pub fn parse_expiration_date(whois_info: &str) -> Option<String> {
                 return Some(datetime_utc.to_rfc3339());
             }
             continue;
+        } else if line_trimmed.starts_with("validity:") {
+            let re = Regex::new(r"\s*validity:\s+(.*)").unwrap();
+            for caps in re.captures_iter(line) {
+                return str_to_utc_datetime(caps.get(1).unwrap().as_str());
+            }
+            continue;
         }
     }
 
