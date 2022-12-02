@@ -13,28 +13,6 @@ mod passing {
     use whoisthere::DomainPropStatus;
 
     #[test]
-    fn somesite_co_uk() {
-        let domain_name: &str = "somesite.co.uk";
-        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
-        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
-        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
-            .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
-
-        assert_eq!(domain_props.domain_name, "somesite.co.uk");
-        assert_eq!(
-            domain_props.expiration_date,
-            Some("2022-05-14T00:00:00+00:00".to_string())
-        );
-        // assert_eq!(
-        //     domain_props.registrar,
-        //     Some("Paragon Internet Group Ltd t/a Tsohost [Tag = UKWEBHOSTING]")
-        // );
-        assert_eq!(domain_props.is_registered, Some(true));
-        // assert_eq!(domain_props.status, DomainPropStatus::Registered);
-    }
-
-    #[test]
     fn crates_io() {
         let domain_name = "crates.io";
         let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
@@ -89,6 +67,50 @@ mod passing {
         assert_eq!(domain_props.registrar, None);
         assert_eq!(domain_props.is_registered, Some(true));
         // assert_eq!(domain_props.status, DomainPropStatus::Unknown);
+    }
+
+    #[test]
+    fn somesite_co_uk() {
+        let domain_name: &str = "somesite.co.uk";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "somesite.co.uk");
+        assert_eq!(
+            domain_props.expiration_date,
+            Some("2022-05-14T00:00:00+00:00".to_string())
+        );
+        // assert_eq!(
+        //     domain_props.registrar,
+        //     Some("Paragon Internet Group Ltd t/a Tsohost [Tag = UKWEBHOSTING]")
+        // );
+        assert_eq!(domain_props.is_registered, Some(true));
+        // assert_eq!(domain_props.status, DomainPropStatus::Registered);
+    }
+
+    #[test]
+    fn tesla_co_il() {
+        let domain_name: &str = "tesla.co.il";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "tesla.co.il");
+        assert_eq!(
+            domain_props.expiration_date,
+            Some("2025-02-05T00:00:00+00:00".to_string())
+        );
+        // assert_eq!(
+        //     domain_props.registrar,
+        //     Some("Paragon Internet Group Ltd t/a Tsohost [Tag = UKWEBHOSTING]")
+        // );
+        assert_eq!(domain_props.is_registered, Some(true));
+        // assert_eq!(domain_props.status, DomainPropStatus::Registered);
     }
 
     #[test]
