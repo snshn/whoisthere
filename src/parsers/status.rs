@@ -13,6 +13,22 @@ pub fn parse_status(whois_info: &str) -> DomainPropStatus {
     for line in lines {
         let line_trimmed = line.trim();
 
+        // Parse expiration date
+        if line_trimmed.starts_with("Domain not found.")
+            || line_trimmed.starts_with("Domain not registered.")
+            || line_trimmed.starts_with("No match for")
+            || line_trimmed.starts_with("% No entries found for query")
+        {
+            // Nothing to do, get out of the loop
+            status.flag = DomainPropStatusFlag::Unregistered;
+        }
+    }
+
+    let lines = whois_info.lines();
+
+    for line in lines {
+        let line_trimmed = line.trim();
+
         // Parse status
         if line_trimmed.starts_with("Domain Status:") {
             let re = Regex::new(r"\s*Domain Status:\s+(.*)").unwrap();
