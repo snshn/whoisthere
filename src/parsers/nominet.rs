@@ -3,7 +3,7 @@
 use chrono::{DateTime, NaiveDate, NaiveDateTime, Utc};
 use regex::Regex;
 
-use crate::DomainProps;
+use crate::{DomainProps, WhoisService};
 
 #[derive(PartialEq)]
 enum Group {
@@ -19,6 +19,7 @@ enum Group {
 pub fn parse_nominet_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
     let mut domain_props = DomainProps {
         domain_name: "",
+        whois_service: Some(WhoisService::Nominet),
         is_registered: None,
         expiry_date: None,
         registrar: None,

@@ -10,6 +10,8 @@ mod passing {
     use std::fs;
     use std::path::Path;
 
+    use whoisthere::WhoisService;
+
     #[test]
     fn crates_io() {
         let domain_name = "crates.io";
@@ -20,6 +22,7 @@ mod passing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "CRATES.IO");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,
@@ -38,6 +41,7 @@ mod passing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "ferrari.it");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::NicIt));
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,
@@ -56,6 +60,7 @@ mod passing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "GITHUB.COM");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,
@@ -73,6 +78,7 @@ mod passing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "MIT.EDU");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Educause));
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,
@@ -90,6 +96,7 @@ mod passing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "rustup.rs");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Rnids));
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,
@@ -108,6 +115,7 @@ mod passing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "site.is");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Isnic));
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,
@@ -126,6 +134,7 @@ mod passing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "somesite.co.uk");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Nominet));
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,
@@ -147,6 +156,7 @@ mod passing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "tesla.co.il");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::IsocIl));
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(domain_props.expiry_date, None);
         // assert_eq!(
@@ -165,6 +175,7 @@ mod passing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "WHITEHOUSE.GOV");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Dotgov));
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(domain_props.expiry_date, None);
     }
@@ -179,6 +190,7 @@ mod passing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "YANDEX.RU");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Tcinet));
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,
@@ -200,6 +212,8 @@ mod failing {
     use std::fs;
     use std::path::Path;
 
+    use whoisthere::WhoisService;
+
     #[test]
     fn empty() {
         let mock_domain_name = "";
@@ -208,6 +222,7 @@ mod failing {
             whoisthere::parse_domain_whois_info(mock_domain_name, mock_whois_response);
 
         assert_eq!(domain_props.domain_name, "");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann)); // This is wrong
         assert_eq!(domain_props.is_registered, None);
         assert_eq!(domain_props.expiry_date, None);
     }
@@ -222,6 +237,7 @@ mod failing {
         let domain_props = whoisthere::parse_domain_whois_info(&domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "EXPIRED.COM");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann)); // This is wrong
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,
@@ -239,6 +255,7 @@ mod failing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.edu");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Educause)); // This is wrong
         assert_eq!(domain_props.is_registered, Some(false));
         assert_eq!(domain_props.expiry_date, None);
     }
@@ -253,6 +270,7 @@ mod failing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "UNREGISTERED.GOV");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Dotgov)); // This is wrong
         assert_eq!(domain_props.is_registered, Some(false));
         assert_eq!(domain_props.expiry_date, None);
     }
@@ -267,6 +285,7 @@ mod failing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.il");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::IsocIl)); // This is wrong
         assert_eq!(domain_props.is_registered, Some(false));
         assert_eq!(domain_props.expiry_date, None);
     }
@@ -281,6 +300,7 @@ mod failing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.is");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Isnic)); // This is wrong
         assert_eq!(domain_props.is_registered, Some(false));
         assert_eq!(domain_props.expiry_date, None);
     }
@@ -295,6 +315,7 @@ mod failing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.rs");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Rnids)); // This is wrong
         assert_eq!(domain_props.is_registered, Some(false));
         assert_eq!(domain_props.expiry_date, None);
     }
@@ -309,6 +330,7 @@ mod failing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.social");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann)); // This is wrong
         assert_eq!(domain_props.is_registered, Some(false));
         assert_eq!(domain_props.expiry_date, None);
     }
@@ -323,6 +345,7 @@ mod failing {
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.uk");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Nominet)); // This is wrong
         assert_eq!(domain_props.is_registered, Some(false));
         assert_eq!(domain_props.expiry_date, None);
     }

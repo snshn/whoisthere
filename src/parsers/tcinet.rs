@@ -3,11 +3,12 @@
 use chrono::{DateTime, Utc};
 use regex::Regex;
 
-use crate::DomainProps;
+use crate::{DomainProps, WhoisService};
 
 pub fn parse_tcinet_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
     let mut domain_props = DomainProps {
         domain_name: "",
+        whois_service: Some(WhoisService::Tcinet),
         is_registered: None,
         expiry_date: None,
         registrar: None,
