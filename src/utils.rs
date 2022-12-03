@@ -5,6 +5,7 @@ pub fn str_to_utc_datetime(datetime: &str) -> Option<String> {
     let re_bdy = Regex::new(r"(January|February|March|April|May|June|July|August|September|October|November|December) \d{2} \d{4}").unwrap();
     let re_dby = Regex::new(r"\d{2}-(January|February|March|April|May|June|July|August|September|October|November|December)-\d{4}").unwrap();
     let re_dmy = Regex::new(r"\d{2}-\d{2}-\d{4}").unwrap();
+    let re_ymd = Regex::new(r"\d{4}-\d{2}-\d{2}").unwrap();
 
     if re_bdy.is_match(datetime) {
         let naive_date = NaiveDate::parse_from_str(datetime, "%B %d %Y").unwrap();
@@ -18,6 +19,11 @@ pub fn str_to_utc_datetime(datetime: &str) -> Option<String> {
         return Some(datetime_utc.to_rfc3339());
     } else if re_dmy.is_match(datetime) {
         let naive_date = NaiveDate::parse_from_str(datetime, "%d-%m-%Y").unwrap();
+        let naive_datetime: NaiveDateTime = naive_date.and_hms(0, 0, 0);
+        let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
+        return Some(datetime_utc.to_rfc3339());
+    } else if re_ymd.is_match(datetime) {
+        let naive_date = NaiveDate::parse_from_str(datetime, "%Y-%m-%d").unwrap();
         let naive_datetime: NaiveDateTime = naive_date.and_hms(0, 0, 0);
         let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
         return Some(datetime_utc.to_rfc3339());
