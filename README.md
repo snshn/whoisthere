@@ -18,7 +18,7 @@ let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_s
 let domain_info = parse_domain_whois_info(domain_name, &whois_response);
 
 assert_eq!(domain_info.domain_name, "somesite.co.uk");
-assert_eq!(domain_info.expiration_date, Some("2022-05-14T00:00:00Z"));
+assert_eq!(domain_info.expiry_date, Some("2022-05-14T00:00:00Z"));
 assert_eq!(domain_info.registrar, Some("Paragon Internet Group Ltd t/a Tsohost [Tag = UKWEBHOSTING]"));
 assert_eq!(domain_info.is_registered, Some(true));
 ```

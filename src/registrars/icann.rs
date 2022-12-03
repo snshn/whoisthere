@@ -9,7 +9,7 @@ pub fn parse_icann_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Domai
     let mut domain_props = DomainProps {
         domain_name: "",
         is_registered: None,
-        expiration_date: None,
+        expiry_date: None,
         registrar: None,
     };
 
@@ -30,7 +30,7 @@ pub fn parse_icann_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Domai
             for caps in re.captures_iter(line_trimmed) {
                 let result = caps.get(1).unwrap().as_str();
                 let datetime_utc = result.parse::<DateTime<Utc>>().unwrap();
-                domain_props.expiration_date = Some(datetime_utc.to_rfc3339());
+                domain_props.expiry_date = Some(datetime_utc.to_rfc3339());
                 domain_props.is_registered = Some(true);
             }
             continue;
