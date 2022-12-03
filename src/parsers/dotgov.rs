@@ -1,7 +1,8 @@
 // DOTGOV: .gov
 
-use crate::DomainProps;
 use regex::Regex;
+
+use crate::DomainProps;
 
 pub fn parse_dotgov_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
     let mut domain_props = DomainProps {

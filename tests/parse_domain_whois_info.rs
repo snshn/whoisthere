@@ -64,6 +64,23 @@ mod passing {
     }
 
     #[test]
+    fn mit_edi() {
+        let domain_name = "mit.edu";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "MIT.EDU");
+        assert_eq!(domain_props.is_registered, Some(true));
+        assert_eq!(
+            domain_props.expiry_date,
+            Some("2024-07-31T00:00:00+00:00".to_string())
+        );
+    }
+
+    #[test]
     fn rustup_rs() {
         let domain_name = "rustup.rs";
         let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
@@ -210,6 +227,20 @@ mod failing {
             domain_props.expiry_date,
             Some("2021-04-09T03:02:37+00:00".to_string())
         );
+    }
+
+    #[test]
+    fn unregistered_edu() {
+        let domain_name = "unregistered.edu";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "unregistered.edu");
+        assert_eq!(domain_props.is_registered, Some(false));
+        assert_eq!(domain_props.expiry_date, None);
     }
 
     #[test]

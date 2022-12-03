@@ -1,6 +1,7 @@
 mod parsers;
 
 use crate::parsers::dotgov::parse_dotgov_domain_whois_info;
+use crate::parsers::educause::parse_educause_domain_whois_info;
 use crate::parsers::icann::parse_icann_domain_whois_info;
 use crate::parsers::isnic::parse_isnic_domain_whois_info;
 use crate::parsers::isocil::parse_isocil_domain_whois_info;
@@ -19,6 +20,12 @@ pub struct DomainProps<'t> {
 pub fn parse_domain_whois_info<'t>(domain_name: &'t str, whois_info: &'t str) -> DomainProps<'t> {
     if domain_name.ends_with(".com") {
         let mut domain_info = parse_icann_domain_whois_info(whois_info);
+        if domain_info.domain_name == "" {
+            domain_info.domain_name = domain_name;
+        }
+        return domain_info;
+    } else if domain_name.ends_with(".edu") {
+        let mut domain_info = parse_educause_domain_whois_info(whois_info);
         if domain_info.domain_name == "" {
             domain_info.domain_name = domain_name;
         }
