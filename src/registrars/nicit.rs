@@ -16,6 +16,10 @@ pub fn parse_nicit_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Domai
     let lines = whois_info.lines();
 
     for line in lines {
+        if line == "" {
+            continue;
+        }
+
         if line == "Status:             AVAILABLE" {
             domain_props.is_registered = Some(false);
             break;
