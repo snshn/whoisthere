@@ -49,6 +49,15 @@ pub fn parse_icann_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Domai
             }
             continue;
         }
+
+        // Parse domain name
+        if line_trimmed.starts_with("Domain Name: ") {
+            let re = Regex::new(r"Domain Name:\s+(.*)").unwrap();
+            for caps in re.captures_iter(line_trimmed) {
+                domain_props.domain_name = caps.get(1).unwrap().as_str();
+            }
+            continue;
+        }
     }
 
     return domain_props;

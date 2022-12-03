@@ -19,7 +19,7 @@ mod passing {
             .expect("Something went wrong reading the file");
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
-        assert_eq!(domain_props.domain_name, "crates.io");
+        assert_eq!(domain_props.domain_name, "CRATES.IO");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,
@@ -55,7 +55,7 @@ mod passing {
             .expect("Something went wrong reading the file");
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
-        assert_eq!(domain_props.domain_name, "github.com");
+        assert_eq!(domain_props.domain_name, "GITHUB.COM");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,
@@ -204,7 +204,7 @@ mod failing {
             .expect("Something went wrong reading the file");
         let domain_props = whoisthere::parse_domain_whois_info(&domain_name, &whois_response);
 
-        assert_eq!(domain_props.domain_name, "expired.com");
+        assert_eq!(domain_props.domain_name, "EXPIRED.COM");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,
