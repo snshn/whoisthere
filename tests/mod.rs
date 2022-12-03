@@ -1,1 +1,1 @@
-mod parse_info;
+mod parse_domain_whois_info;

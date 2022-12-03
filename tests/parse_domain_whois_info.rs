@@ -17,7 +17,7 @@ mod passing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "crates.io");
         assert_eq!(domain_props.is_registered, Some(true));
@@ -35,7 +35,7 @@ mod passing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "ferrari.it");
         assert_eq!(domain_props.is_registered, Some(true));
@@ -53,7 +53,7 @@ mod passing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "rustup.rs");
         assert_eq!(domain_props.is_registered, Some(true));
@@ -71,7 +71,7 @@ mod passing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "site.is");
         assert_eq!(domain_props.is_registered, Some(true));
@@ -89,7 +89,7 @@ mod passing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "somesite.co.uk");
         assert_eq!(domain_props.is_registered, Some(true));
@@ -110,7 +110,7 @@ mod passing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "tesla.co.il");
         assert_eq!(domain_props.is_registered, Some(true));
@@ -128,7 +128,7 @@ mod passing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "whitehouse.gov");
         assert_eq!(domain_props.is_registered, Some(true));
@@ -142,7 +142,7 @@ mod passing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "yandex.ru");
         assert_eq!(domain_props.is_registered, Some(true));
@@ -170,7 +170,8 @@ mod failing {
     fn empty() {
         let mock_domain_name = "";
         let mock_whois_response = "";
-        let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
+        let domain_props =
+            whoisthere::parse_domain_whois_info(mock_domain_name, mock_whois_response);
 
         assert_eq!(domain_props.domain_name, "");
         assert_eq!(domain_props.is_registered, None);
@@ -184,7 +185,7 @@ mod failing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(&domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(&domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "expired.com");
         assert_eq!(domain_props.is_registered, Some(true));
@@ -201,7 +202,7 @@ mod failing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.gov");
         assert_eq!(domain_props.is_registered, Some(false));
@@ -215,7 +216,7 @@ mod failing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.il");
         assert_eq!(domain_props.is_registered, Some(false));
@@ -229,7 +230,7 @@ mod failing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.is");
         assert_eq!(domain_props.is_registered, Some(false));
@@ -243,7 +244,7 @@ mod failing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.rs");
         assert_eq!(domain_props.is_registered, Some(false));
@@ -257,7 +258,7 @@ mod failing {
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
         assert_eq!(domain_props.domain_name, "unregistered.social");
         assert_eq!(domain_props.is_registered, Some(false));

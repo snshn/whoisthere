@@ -6,6 +6,7 @@ use crate::parsers::expiration_date::parse_expiration_date;
 use crate::parsers::registrar::parse_registrar;
 use crate::parsers::registration::parse_is_not_registered;
 use crate::registrars::dotgov::parse_dotgov_registrar_domain_whois_info;
+use crate::registrars::isnic::parse_isnic_registrar_domain_whois_info;
 use crate::registrars::isocil::parse_isocil_registrar_domain_whois_info;
 use crate::registrars::rnids::parse_rnids_registrar_domain_whois_info;
 
@@ -16,11 +17,13 @@ pub struct DomainProps<'t> {
     pub registrar: Option<&'t str>,
 }
 
-pub fn parse_info<'t>(domain_name: &'t str, whois_info: &'t str) -> DomainProps<'t> {
+pub fn parse_domain_whois_info<'t>(domain_name: &'t str, whois_info: &'t str) -> DomainProps<'t> {
     if domain_name.ends_with(".gov") {
         return parse_dotgov_registrar_domain_whois_info(domain_name, whois_info);
     } else if domain_name.ends_with(".il") {
         return parse_isocil_registrar_domain_whois_info(domain_name, whois_info);
+    } else if domain_name.ends_with(".is") {
+        return parse_isnic_registrar_domain_whois_info(domain_name, whois_info);
     } else if domain_name.ends_with(".rs") {
         return parse_rnids_registrar_domain_whois_info(domain_name, whois_info);
     }
