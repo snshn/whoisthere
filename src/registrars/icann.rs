@@ -16,7 +16,7 @@ pub fn parse_icann_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Domai
     let lines = whois_info.lines();
 
     for line in lines {
-        if line.starts_with("No match for domain \"") && line.ends_with("\".") {
+        if line.starts_with("No match for domain \"") && line.ends_with("\".") || line == "Domain not found." {
             domain_props.is_registered = Some(false);
             break;
         }

@@ -9,13 +9,7 @@ pub fn parse_expiration_date(whois_info: &str) -> Option<String> {
     for line in lines {
         let line_trimmed = line.trim();
 
-        if line_trimmed.starts_with("Expiry date:") {
-            let re = Regex::new(r"\s*Expiry date:\s+(.*)").unwrap();
-            for caps in re.captures_iter(line) {
-                return str_to_utc_datetime(caps.get(1).unwrap().as_str());
-            }
-            continue;
-        } else if line_trimmed.starts_with("paid-till:") {
+        if line_trimmed.starts_with("paid-till:") {
             let re = Regex::new(r"\s*paid-till:\s+(.*)").unwrap();
             for caps in re.captures_iter(line) {
                 let result = caps.get(1).unwrap().as_str();
