@@ -71,35 +71,10 @@ pub fn parse_domain_whois_info<'t>(domain_name: &'t str, whois_info: &'t str) ->
         return domain_info;
     } else {
         // // Everything else should fall onto ICANN
-        // let mut domain_info = parse_icann_registrar_domain_whois_info(whois_info);
-        // if domain_info.domain_name == "" {
-        //     domain_info.domain_name = domain_name;
-        // }
-        // return domain_info;
-    }
-
-    let mut whois_data = DomainProps {
-        domain_name: domain_name,
-        is_registered: None,
-        expiration_date: None,
-        registrar: None,
-    };
-
-    // Check if not registered first
-    if parse_is_not_registered(whois_info) {
-        whois_data.is_registered = Some(false);
-    } else {
-        // Parse expiration date
-        if let Some(expiration_date) = parse_expiration_date(whois_info) {
-            whois_data.expiration_date = Some(expiration_date);
-            whois_data.is_registered = Some(true);
+        let mut domain_info = parse_icann_registrar_domain_whois_info(whois_info);
+        if domain_info.domain_name == "" {
+            domain_info.domain_name = domain_name;
         }
-
-        // Parse registrar name
-        whois_data.registrar = parse_registrar(whois_info);
+        return domain_info;
     }
-
-    // TODO: throw errors instead of simply returning a struct
-
-    return whois_data;
 }
