@@ -161,7 +161,7 @@ mod passing {
             .expect("Something went wrong reading the file");
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
-        assert_eq!(domain_props.domain_name, "yandex.ru");
+        assert_eq!(domain_props.domain_name, "YANDEX.RU");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiry_date,

@@ -21,11 +21,9 @@ pub fn parse_tcinet_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Doma
             break;
         }
 
-        let line_trimmed = line.trim();
-
-        if line_trimmed.starts_with("paid-till:") {
+        if line.starts_with("paid-till:") {
             let re = Regex::new(r"paid-till:\s+(.*)").unwrap();
-            for caps in re.captures_iter(line_trimmed) {
+            for caps in re.captures_iter(line) {
                 let result = caps.get(1).unwrap().as_str();
                 let datetime_utc = result.parse::<DateTime<Utc>>().unwrap();
                 domain_props.expiry_date = Some(datetime_utc.to_rfc3339());
@@ -34,12 +32,21 @@ pub fn parse_tcinet_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Doma
             continue;
         }
 
-        if line_trimmed.starts_with("registrar:") {
+        if line.starts_with("registrar:") {
             let re = Regex::new(r"registrar:\s+(.*)").unwrap();
             // TODO: scan following lines, use struct { name, url }
-            for caps in re.captures_iter(line_trimmed) {
+            for caps in re.captures_iter(line) {
                 let result = caps.get(1).unwrap().as_str();
                 domain_props.registrar = Some(result);
+            }
+            continue;
+        }
+
+        // Parse domain name
+        if line.starts_with("domain:") {
+            let re = Regex::new(r"domain:\s+(.*)").unwrap();
+            for caps in re.captures_iter(line) {
+                domain_props.domain_name = caps.get(1).unwrap().as_str();
             }
             continue;
         }
