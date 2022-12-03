@@ -9,6 +9,7 @@ use crate::registrars::dotgov::parse_dotgov_registrar_domain_whois_info;
 use crate::registrars::isnic::parse_isnic_registrar_domain_whois_info;
 use crate::registrars::isocil::parse_isocil_registrar_domain_whois_info;
 use crate::registrars::nicit::parse_nicit_registrar_domain_whois_info;
+use crate::registrars::nominet::parse_nominet_registrar_domain_whois_info;
 use crate::registrars::rnids::parse_rnids_registrar_domain_whois_info;
 
 pub struct DomainProps<'t> {
@@ -45,6 +46,12 @@ pub fn parse_domain_whois_info<'t>(domain_name: &'t str, whois_info: &'t str) ->
         return domain_info;
     } else if domain_name.ends_with(".rs") {
         let mut domain_info = parse_rnids_registrar_domain_whois_info(whois_info);
+        if domain_info.domain_name == "" {
+            domain_info.domain_name = domain_name;
+        }
+        return domain_info;
+    } else if domain_name.ends_with(".uk") {
+        let mut domain_info = parse_nominet_registrar_domain_whois_info(whois_info);
         if domain_info.domain_name == "" {
             domain_info.domain_name = domain_name;
         }

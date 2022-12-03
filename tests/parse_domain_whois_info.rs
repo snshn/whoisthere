@@ -264,4 +264,18 @@ mod failing {
         assert_eq!(domain_props.is_registered, Some(false));
         assert_eq!(domain_props.expiration_date, None);
     }
+
+    #[test]
+    fn unregistered_uk() {
+        let domain_name = "unregistered.uk";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "unregistered.uk");
+        assert_eq!(domain_props.is_registered, Some(false));
+        assert_eq!(domain_props.expiration_date, None);
+    }
 }
