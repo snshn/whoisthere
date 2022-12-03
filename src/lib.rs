@@ -8,6 +8,7 @@ use crate::parsers::registration::parse_is_not_registered;
 use crate::parsers::status::parse_status;
 use crate::registrars::dotgov::parse_dotgov_registrar_domain_whois_info;
 use crate::registrars::isocil::parse_isocil_registrar_domain_whois_info;
+use crate::registrars::rnids::parse_rnids_registrar_domain_whois_info;
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum DomainPropStatus {
@@ -35,6 +36,8 @@ pub fn parse_info<'t>(domain_name: &'t str, whois_info: &'t str) -> DomainProps<
         return parse_dotgov_registrar_domain_whois_info(domain_name, whois_info);
     } else if domain_name.ends_with(".il") {
         return parse_isocil_registrar_domain_whois_info(domain_name, whois_info);
+    } else if domain_name.ends_with(".rs") {
+        return parse_rnids_registrar_domain_whois_info(domain_name, whois_info);
     }
 
     let mut whois_data = DomainProps {

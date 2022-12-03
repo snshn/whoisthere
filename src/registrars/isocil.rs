@@ -1,4 +1,4 @@
-// ISOC-IL: *.il
+// ISOC-IL: .il
 
 use crate::{DomainPropStatus, DomainProps};
 

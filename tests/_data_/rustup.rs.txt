@@ -1,0 +1,42 @@
+
+% The data in the Whois database are provided by RNIDS
+% for information purposes only and to assist persons in obtaining
+% information about or related to a domain name registration record. 
+% Data in the database are created by registrants and we do not guarantee 
+% their accuracy. We reserve the right to remove access 
+% for entities abusing the data, without notice.
+% All timestamps are given in Serbian local time. 
+%
+Domain name: rustup.rs
+Domain status: Active https://www.rnids.rs/en/domain-name-status-codes#Active
+Registration date: 26.01.2016 18:43:08
+Modification date: 09.06.2022 19:41:10
+Expiration date: 26.01.2026 18:43:08
+Confirmed: 26.01.2016 18:43:08
+Registrar: Webglobe d.o.o.
+
+
+Registrant: Individual
+
+Administrative contact: Rust Foundation
+Address: 401 Edgewater Place, Suite 600, Wakefield, United States of America
+Postal Code: 01880
+ID Number: 85-4376974
+Tax ID: 
+
+Technical contact: Rust Foundation
+Address: 401 Edgewater Place, Suite 600, Wakefield, United States of America
+Postal Code: 01880
+ID Number: 85-4376974
+Tax ID: 
+
+
+DNS: ns-318.awsdns-39.com - 
+DNS: ns-1111.awsdns-10.org - 
+DNS: ns-1857.awsdns-40.co.uk - 
+DNS: ns-981.awsdns-58.net - 
+
+
+DNSSEC signed: no
+
+Whois Timestamp: 03.12.2022 01:56:49
