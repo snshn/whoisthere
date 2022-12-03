@@ -1,8 +1,8 @@
-// DOTGOV: .gov
+// ISOC-IL: *.il
 
 use crate::{DomainPropStatus, DomainProps};
 
-pub fn parse_dotgov_registrar_domain_whois_info<'a>(
+pub fn parse_isocil_registrar_domain_whois_info<'a>(
     domain_name: &'a str,
     whois_info: &'a str,
 ) -> DomainProps<'a> {
@@ -16,16 +16,12 @@ pub fn parse_dotgov_registrar_domain_whois_info<'a>(
 
     let lines = whois_info.lines();
 
-    for line in lines {
-        if line.eq_ignore_ascii_case(&format!("No match for \"{}\".", domain_name.to_uppercase())) {
-            domain_props.is_registered = Some(false);
-            break;
-        }
-
-        if line == "   Status: ACTIVE" {
-            domain_props.is_registered = Some(true);
-            break;
-        }
+    // Domain not registered, return basic info
+    if lines.clone().count() == 15 {
+        domain_props.is_registered = Some(false);
+        return domain_props;
+    } else {
+        domain_props.is_registered = Some(true);
     }
 
     return domain_props;

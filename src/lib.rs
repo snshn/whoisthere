@@ -6,7 +6,8 @@ use crate::parsers::expiration_date::parse_expiration_date;
 use crate::parsers::registrar::parse_registrar;
 use crate::parsers::registration::parse_is_not_registered;
 use crate::parsers::status::parse_status;
-use crate::registrars::dotgov::parse_dotgov_domain_whois_info;
+use crate::registrars::dotgov::parse_dotgov_registrar_domain_whois_info;
+use crate::registrars::isocil::parse_isocil_registrar_domain_whois_info;
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum DomainPropStatus {
@@ -31,7 +32,9 @@ impl DomainProps<'_> {
 
 pub fn parse_info<'t>(domain_name: &'t str, whois_info: &'t str) -> DomainProps<'t> {
     if domain_name.ends_with(".gov") {
-        return parse_dotgov_domain_whois_info(domain_name, whois_info);
+        return parse_dotgov_registrar_domain_whois_info(domain_name, whois_info);
+    } else if domain_name.ends_with(".il") {
+        return parse_isocil_registrar_domain_whois_info(domain_name, whois_info);
     }
 
     let mut whois_data = DomainProps {
