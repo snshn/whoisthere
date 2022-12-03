@@ -1,11 +1,11 @@
-// ISNIC: .is
+// NIC-IT: .it
 
 use chrono::{DateTime, NaiveDate, NaiveDateTime, Utc};
 use regex::Regex;
 
 use crate::DomainProps;
 
-pub fn parse_isnic_registrar_domain_whois_info<'a>(
+pub fn parse_nicit_registrar_domain_whois_info<'a>(
     domain_name: &'a str,
     whois_info: &'a str,
 ) -> DomainProps<'a> {
@@ -19,19 +19,16 @@ pub fn parse_isnic_registrar_domain_whois_info<'a>(
     let lines = whois_info.lines();
 
     for line in lines {
-        if line.eq_ignore_ascii_case(&format!(
-            "% No entries found for query \"{}\".",
-            domain_name.to_lowercase()
-        )) {
+        if line == "Status:             AVAILABLE" {
             domain_props.is_registered = Some(false);
             break;
         }
 
-        if line.starts_with("expires:") {
-            let re = Regex::new(r"expires:\s+(.*)").unwrap();
+        if line.starts_with("Expire Date:") {
+            let re = Regex::new(r"Expire Date:\s+(.*)").unwrap();
             for caps in re.captures_iter(line) {
                 let naive_date =
-                    NaiveDate::parse_from_str(caps.get(1).unwrap().as_str(), "%B %d %Y").unwrap();
+                    NaiveDate::parse_from_str(caps.get(1).unwrap().as_str(), "%Y-%m-%d").unwrap();
                 let naive_datetime: NaiveDateTime = naive_date.and_hms(0, 0, 0);
                 let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
                 domain_props.expiration_date = Some(datetime_utc.to_rfc3339());
