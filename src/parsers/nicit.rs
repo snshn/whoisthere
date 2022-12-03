@@ -20,6 +20,15 @@ pub fn parse_nicit_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a>
             continue;
         }
 
+        // Parse domain name
+        if line.starts_with("Domain: ") {
+            let re = Regex::new(r"Domain:\s+(.*)").unwrap();
+            for caps in re.captures_iter(line) {
+                domain_props.domain_name = caps.get(1).unwrap().as_str();
+            }
+            continue;
+        }
+
         if line == "Status:             AVAILABLE" {
             domain_props.is_registered = Some(false);
             break;
