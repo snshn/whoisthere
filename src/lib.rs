@@ -20,15 +20,35 @@ pub struct DomainProps<'t> {
 
 pub fn parse_domain_whois_info<'t>(domain_name: &'t str, whois_info: &'t str) -> DomainProps<'t> {
     if domain_name.ends_with(".gov") {
-        return parse_dotgov_registrar_domain_whois_info(domain_name, whois_info);
+        let mut domain_info = parse_dotgov_registrar_domain_whois_info(whois_info);
+        if domain_info.domain_name == "" {
+            domain_info.domain_name = domain_name;
+        }
+        return domain_info;
     } else if domain_name.ends_with(".il") {
-        return parse_isocil_registrar_domain_whois_info(domain_name, whois_info);
+        let mut domain_info = parse_isocil_registrar_domain_whois_info(whois_info);
+        if domain_info.domain_name == "" {
+            domain_info.domain_name = domain_name;
+        }
+        return domain_info;
     } else if domain_name.ends_with(".is") {
-        return parse_isnic_registrar_domain_whois_info(domain_name, whois_info);
+        let mut domain_info = parse_isnic_registrar_domain_whois_info(whois_info);
+        if domain_info.domain_name == "" {
+            domain_info.domain_name = domain_name;
+        }
+        return domain_info;
     } else if domain_name.ends_with(".it") {
-        return parse_nicit_registrar_domain_whois_info(domain_name, whois_info);
+        let mut domain_info = parse_nicit_registrar_domain_whois_info(whois_info);
+        if domain_info.domain_name == "" {
+            domain_info.domain_name = domain_name;
+        }
+        return domain_info;
     } else if domain_name.ends_with(".rs") {
-        return parse_rnids_registrar_domain_whois_info(domain_name, whois_info);
+        let mut domain_info = parse_rnids_registrar_domain_whois_info(whois_info);
+        if domain_info.domain_name == "" {
+            domain_info.domain_name = domain_name;
+        }
+        return domain_info;
     }
 
     let mut whois_data = DomainProps {
