@@ -51,22 +51,21 @@ mod passing {
     }
 
     #[test]
-    fn registered_rs() {
-        let domain_name = "registered.rs";
+    fn rustup_rs() {
+        let domain_name = "rustup.rs";
         let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
         let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
-        assert_eq!(domain_props.domain_name, "registered.rs");
+        assert_eq!(domain_props.domain_name, "rustup.rs");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
             domain_props.expiration_date,
-            Some("2023-03-24T19:25:04+00:00".to_string())
+            Some("2026-01-26T18:43:08+00:00".to_string())
         );
-        assert_eq!(domain_props.registrar, Some("NINET Company d.o.o."));
-        // assert_eq!(domain_props.status, DomainPropStatus::Registered);
+        assert_eq!(domain_props.registrar, Some("Webglobe d.o.o."));
     }
 
     #[test]
@@ -178,33 +177,15 @@ mod failing {
     use whoisthere::DomainPropStatus;
 
     #[test]
-    fn unregistered_gov() {
-        let domain_name = "unregistered.gov";
-        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
-        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
-        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
-            .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+    fn empty() {
+        let mock_domain_name = "";
+        let mock_whois_response = "";
+        let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
 
-        assert_eq!(domain_props.domain_name, "unregistered.gov");
-        assert_eq!(domain_props.is_registered, Some(false));
+        assert_eq!(domain_props.domain_name, "");
+        assert_eq!(domain_props.is_registered, None);
         assert_eq!(domain_props.expiration_date, None);
-        // assert_eq!(domain_props.status, DomainPropStatus::Unregistered);
-    }
-
-    #[test]
-    fn unregistered_social() {
-        let domain_name = "unregistered.social";
-        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
-        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
-        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
-            .expect("Something went wrong reading the file");
-        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
-
-        assert_eq!(domain_props.domain_name, "unregistered.social");
-        assert_eq!(domain_props.is_registered, Some(false));
-        assert_eq!(domain_props.expiration_date, None);
-        // assert_eq!(domain_props.status, DomainPropStatus::Unregistered);
+        // assert_eq!(domain_props.status, DomainPropStatus::Unknown);
     }
 
     #[test]
@@ -226,6 +207,36 @@ mod failing {
     }
 
     #[test]
+    fn unregistered_gov() {
+        let domain_name = "unregistered.gov";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "unregistered.gov");
+        assert_eq!(domain_props.is_registered, Some(false));
+        assert_eq!(domain_props.expiration_date, None);
+        // assert_eq!(domain_props.status, DomainPropStatus::Unregistered);
+    }
+
+    #[test]
+    fn unregistered_il() {
+        let domain_name = "unregistered.il";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "unregistered.il");
+        assert_eq!(domain_props.is_registered, Some(false));
+        assert_eq!(domain_props.expiration_date, None);
+        // assert_eq!(domain_props.status, DomainPropStatus::Unregistered);
+    }
+
+    #[test]
     fn unregistered_is() {
         let domain_name = "unregistered.is";
         let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
@@ -241,27 +252,30 @@ mod failing {
     }
 
     #[test]
-    fn empty() {
-        let mock_domain_name = "";
-        let mock_whois_response = "";
-        let domain_props = whoisthere::parse_info(mock_domain_name, mock_whois_response);
-
-        assert_eq!(domain_props.domain_name, "");
-        assert_eq!(domain_props.is_registered, None);
-        assert_eq!(domain_props.expiration_date, None);
-        // assert_eq!(domain_props.status, DomainPropStatus::Unknown);
-    }
-
-    #[test]
-    fn unregistered_il() {
-        let domain_name = "unregistered.il";
+    fn unregistered_rs() {
+        let domain_name = "unregistered.rs";
         let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
         let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
         let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
             .expect("Something went wrong reading the file");
         let domain_props = whoisthere::parse_info(domain_name, &whois_response);
 
-        assert_eq!(domain_props.domain_name, "unregistered.il");
+        assert_eq!(domain_props.domain_name, "unregistered.rs");
+        assert_eq!(domain_props.is_registered, Some(false));
+        assert_eq!(domain_props.expiration_date, None);
+        // assert_eq!(domain_props.status, DomainPropStatus::Unregistered);
+    }
+
+    #[test]
+    fn unregistered_social() {
+        let domain_name = "unregistered.social";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "unregistered.social");
         assert_eq!(domain_props.is_registered, Some(false));
         assert_eq!(domain_props.expiration_date, None);
         // assert_eq!(domain_props.status, DomainPropStatus::Unregistered);
