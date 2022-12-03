@@ -6,7 +6,7 @@ pub fn parse_dotgov_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Doma
     let mut domain_props = DomainProps {
         domain_name: "",
         is_registered: None,
-        expiration_date: None,
+        expiry_date: None,
         registrar: None,
     };
 

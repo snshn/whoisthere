@@ -12,7 +12,7 @@ use crate::registrars::tcinet::parse_tcinet_registrar_domain_whois_info;
 pub struct DomainProps<'t> {
     pub domain_name: &'t str,
     pub is_registered: Option<bool>,
-    pub expiration_date: Option<String>,
+    pub expiry_date: Option<String>,
     pub registrar: Option<&'t str>,
 }
 

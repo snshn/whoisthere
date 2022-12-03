@@ -22,7 +22,7 @@ mod passing {
         assert_eq!(domain_props.domain_name, "crates.io");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
-            domain_props.expiration_date,
+            domain_props.expiry_date,
             Some("2023-01-22T08:28:29+00:00".to_string())
         );
         assert_eq!(domain_props.registrar, Some("Gandi SAS"));
@@ -40,7 +40,7 @@ mod passing {
         assert_eq!(domain_props.domain_name, "ferrari.it");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
-            domain_props.expiration_date,
+            domain_props.expiry_date,
             Some("2023-04-15T00:00:00+00:00".to_string())
         );
         // assert_eq!(domain_props.registrar, Some("BARBERO-REG"));
@@ -58,7 +58,7 @@ mod passing {
         assert_eq!(domain_props.domain_name, "github.com");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
-            domain_props.expiration_date,
+            domain_props.expiry_date,
             Some("2024-10-09T18:20:50+00:00".to_string())
         );
     }
@@ -75,7 +75,7 @@ mod passing {
         assert_eq!(domain_props.domain_name, "rustup.rs");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
-            domain_props.expiration_date,
+            domain_props.expiry_date,
             Some("2026-01-26T18:43:08+00:00".to_string())
         );
         assert_eq!(domain_props.registrar, Some("Webglobe d.o.o."));
@@ -93,7 +93,7 @@ mod passing {
         assert_eq!(domain_props.domain_name, "site.is");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
-            domain_props.expiration_date,
+            domain_props.expiry_date,
             Some("2021-03-14T00:00:00+00:00".to_string())
         );
         assert_eq!(domain_props.registrar, None);
@@ -111,7 +111,7 @@ mod passing {
         assert_eq!(domain_props.domain_name, "somesite.co.uk");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
-            domain_props.expiration_date,
+            domain_props.expiry_date,
             Some("2022-05-14T00:00:00+00:00".to_string())
         );
         // assert_eq!(
@@ -131,7 +131,7 @@ mod passing {
 
         assert_eq!(domain_props.domain_name, "tesla.co.il");
         assert_eq!(domain_props.is_registered, Some(true));
-        assert_eq!(domain_props.expiration_date, None);
+        assert_eq!(domain_props.expiry_date, None);
         // assert_eq!(
         //     domain_props.registrar,
         //     Some("Paragon Internet Group Ltd t/a Tsohost [Tag = UKWEBHOSTING]")
@@ -149,7 +149,7 @@ mod passing {
 
         assert_eq!(domain_props.domain_name, "whitehouse.gov");
         assert_eq!(domain_props.is_registered, Some(true));
-        assert_eq!(domain_props.expiration_date, None);
+        assert_eq!(domain_props.expiry_date, None);
     }
 
     #[test]
@@ -164,7 +164,7 @@ mod passing {
         assert_eq!(domain_props.domain_name, "yandex.ru");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
-            domain_props.expiration_date,
+            domain_props.expiry_date,
             Some("2022-09-30T21:00:00+00:00".to_string())
         );
         assert_eq!(domain_props.registrar, Some("RU-CENTER-RU"));
@@ -192,7 +192,7 @@ mod failing {
 
         assert_eq!(domain_props.domain_name, "");
         assert_eq!(domain_props.is_registered, None);
-        assert_eq!(domain_props.expiration_date, None);
+        assert_eq!(domain_props.expiry_date, None);
     }
 
     #[test]
@@ -207,7 +207,7 @@ mod failing {
         assert_eq!(domain_props.domain_name, "expired.com");
         assert_eq!(domain_props.is_registered, Some(true));
         assert_eq!(
-            domain_props.expiration_date,
+            domain_props.expiry_date,
             Some("2021-04-09T03:02:37+00:00".to_string())
         );
     }
@@ -223,7 +223,7 @@ mod failing {
 
         assert_eq!(domain_props.domain_name, "unregistered.gov");
         assert_eq!(domain_props.is_registered, Some(false));
-        assert_eq!(domain_props.expiration_date, None);
+        assert_eq!(domain_props.expiry_date, None);
     }
 
     #[test]
@@ -237,7 +237,7 @@ mod failing {
 
         assert_eq!(domain_props.domain_name, "unregistered.il");
         assert_eq!(domain_props.is_registered, Some(false));
-        assert_eq!(domain_props.expiration_date, None);
+        assert_eq!(domain_props.expiry_date, None);
     }
 
     #[test]
@@ -251,7 +251,7 @@ mod failing {
 
         assert_eq!(domain_props.domain_name, "unregistered.is");
         assert_eq!(domain_props.is_registered, Some(false));
-        assert_eq!(domain_props.expiration_date, None);
+        assert_eq!(domain_props.expiry_date, None);
     }
 
     #[test]
@@ -265,7 +265,7 @@ mod failing {
 
         assert_eq!(domain_props.domain_name, "unregistered.rs");
         assert_eq!(domain_props.is_registered, Some(false));
-        assert_eq!(domain_props.expiration_date, None);
+        assert_eq!(domain_props.expiry_date, None);
     }
 
     #[test]
@@ -279,7 +279,7 @@ mod failing {
 
         assert_eq!(domain_props.domain_name, "unregistered.social");
         assert_eq!(domain_props.is_registered, Some(false));
-        assert_eq!(domain_props.expiration_date, None);
+        assert_eq!(domain_props.expiry_date, None);
     }
 
     #[test]
@@ -293,6 +293,6 @@ mod failing {
 
         assert_eq!(domain_props.domain_name, "unregistered.uk");
         assert_eq!(domain_props.is_registered, Some(false));
-        assert_eq!(domain_props.expiration_date, None);
+        assert_eq!(domain_props.expiry_date, None);
     }
 }

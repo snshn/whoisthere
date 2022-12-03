@@ -9,7 +9,7 @@ pub fn parse_nominet_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Dom
     let mut domain_props = DomainProps {
         domain_name: "",
         is_registered: None,
-        expiration_date: None,
+        expiry_date: None,
         registrar: None,
     };
 
@@ -28,7 +28,7 @@ pub fn parse_nominet_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Dom
                     NaiveDate::parse_from_str(caps.get(1).unwrap().as_str(), "%d-%B-%Y").unwrap();
                 let naive_datetime: NaiveDateTime = naive_date.and_hms(0, 0, 0);
                 let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
-                domain_props.expiration_date = Some(datetime_utc.to_rfc3339());
+                domain_props.expiry_date = Some(datetime_utc.to_rfc3339());
                 domain_props.is_registered = Some(true);
             }
             continue;
