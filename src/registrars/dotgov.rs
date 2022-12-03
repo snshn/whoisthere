@@ -14,6 +14,10 @@ pub fn parse_dotgov_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Doma
     let lines = whois_info.lines();
 
     for line in lines {
+        if line == "" {
+            continue;
+        }
+
         if line.starts_with("No match for \"") && line.ends_with("\".") {
             domain_props.is_registered = Some(false);
 

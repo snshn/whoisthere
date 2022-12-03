@@ -16,6 +16,10 @@ pub fn parse_tcinet_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Doma
     let lines = whois_info.lines();
 
     for line in lines {
+        if line == "" {
+            continue;
+        }
+
         if line == "No entries found for the selected source(s)." {
             domain_props.is_registered = Some(false);
             break;

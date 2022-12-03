@@ -16,6 +16,10 @@ pub fn parse_rnids_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Domai
     let lines = whois_info.lines();
 
     for line in lines {
+        if line == "" {
+            continue;
+        }
+
         if line == "%ERROR:103: Domain is not registered" {
             domain_props.is_registered = Some(false);
             break;
