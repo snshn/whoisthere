@@ -16,7 +16,7 @@ enum Group {
     NameServers,
 }
 
-pub fn parse_nominet_registrar_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
+pub fn parse_nominet_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
     let mut domain_props = DomainProps {
         domain_name: "",
         is_registered: None,

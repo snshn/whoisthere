@@ -5,7 +5,7 @@ use regex::Regex;
 
 use crate::DomainProps;
 
-pub fn parse_isnic_registrar_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
+pub fn parse_isnic_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
     let mut domain_props = DomainProps {
         domain_name: "",
         is_registered: None,

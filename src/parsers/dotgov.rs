@@ -3,7 +3,7 @@
 use crate::DomainProps;
 use regex::Regex;
 
-pub fn parse_dotgov_registrar_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
+pub fn parse_dotgov_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
     let mut domain_props = DomainProps {
         domain_name: "",
         is_registered: None,
