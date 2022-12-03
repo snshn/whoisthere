@@ -10,8 +10,22 @@ use crate::parsers::nominet::parse_nominet_domain_whois_info;
 use crate::parsers::rnids::parse_rnids_domain_whois_info;
 use crate::parsers::tcinet::parse_tcinet_domain_whois_info;
 
+#[derive(Debug, Eq, PartialEq)]
+pub enum WhoisService {
+    Dotgov,
+    Educause,
+    Icann,
+    Isnic,
+    IsocIl,
+    NicIt,
+    Nominet,
+    Rnids,
+    Tcinet,
+}
+
 pub struct DomainProps<'t> {
     pub domain_name: &'t str,
+    pub whois_service: Option<WhoisService>,
     pub is_registered: Option<bool>,
     pub expiry_date: Option<String>,
     pub registrar: Option<&'t str>,
