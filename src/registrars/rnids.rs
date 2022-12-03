@@ -44,6 +44,15 @@ pub fn parse_rnids_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Domai
             }
             continue;
         }
+
+        // Parse domain name
+        if line.starts_with("Domain name: ") {
+            let re = Regex::new(r"Domain name:\s+(.*)").unwrap();
+            for caps in re.captures_iter(line) {
+                domain_props.domain_name = caps.get(1).unwrap().as_str();
+            }
+            continue;
+        }
     }
 
     return domain_props;
