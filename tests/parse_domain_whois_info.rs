@@ -47,6 +47,23 @@ mod passing {
     }
 
     #[test]
+    fn github_com() {
+        let domain_name = "github.com";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "github.com");
+        assert_eq!(domain_props.is_registered, Some(true));
+        assert_eq!(
+            domain_props.expiration_date,
+            Some("2024-10-09T18:20:50+00:00".to_string())
+        );
+    }
+
+    #[test]
     fn rustup_rs() {
         let domain_name = "rustup.rs";
         let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
