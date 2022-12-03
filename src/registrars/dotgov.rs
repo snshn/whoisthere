@@ -2,12 +2,9 @@
 
 use crate::DomainProps;
 
-pub fn parse_dotgov_registrar_domain_whois_info<'a>(
-    domain_name: &'a str,
-    whois_info: &'a str,
-) -> DomainProps<'a> {
+pub fn parse_dotgov_registrar_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
     let mut domain_props = DomainProps {
-        domain_name: domain_name,
+        domain_name: "",
         is_registered: None,
         expiration_date: None,
         registrar: None,
@@ -16,7 +13,7 @@ pub fn parse_dotgov_registrar_domain_whois_info<'a>(
     let lines = whois_info.lines();
 
     for line in lines {
-        if line.eq_ignore_ascii_case(&format!("No match for \"{}\".", domain_name.to_uppercase())) {
+        if line.starts_with("No match for \"") && line.ends_with("\".") {
             domain_props.is_registered = Some(false);
             break;
         }
