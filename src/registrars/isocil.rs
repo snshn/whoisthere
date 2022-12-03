@@ -1,6 +1,6 @@
 // ISOC-IL: .il
 
-use crate::{DomainPropStatus, DomainProps};
+use crate::DomainProps;
 
 pub fn parse_isocil_registrar_domain_whois_info<'a>(
     domain_name: &'a str,
@@ -11,7 +11,6 @@ pub fn parse_isocil_registrar_domain_whois_info<'a>(
         is_registered: None,
         expiration_date: None,
         registrar: None,
-        status: DomainPropStatus::Unknown,
     };
 
     let lines = whois_info.lines();
