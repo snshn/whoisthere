@@ -16,6 +16,13 @@ pub fn parse_dotgov_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Doma
     for line in lines {
         if line.starts_with("No match for \"") && line.ends_with("\".") {
             domain_props.is_registered = Some(false);
+
+            // Parse domain name while we're here
+            let re = Regex::new(r####"No match for "(.*)"."####).unwrap();
+            for caps in re.captures_iter(line) {
+                domain_props.domain_name = caps.get(1).unwrap().as_str();
+            }
+
             break;
         }
 
@@ -24,6 +31,7 @@ pub fn parse_dotgov_registrar_domain_whois_info<'a>(whois_info: &'a str) -> Doma
             break;
         }
 
+        // Parse domain name
         if line.starts_with("   Domain Name: ") {
             let re = Regex::new(r"\s+Domain Name:\s+(.*)").unwrap();
             for caps in re.captures_iter(line) {

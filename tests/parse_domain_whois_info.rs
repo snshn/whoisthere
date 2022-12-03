@@ -221,7 +221,7 @@ mod failing {
             .expect("Something went wrong reading the file");
         let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
 
-        assert_eq!(domain_props.domain_name, "unregistered.gov");
+        assert_eq!(domain_props.domain_name, "UNREGISTERED.GOV");
         assert_eq!(domain_props.is_registered, Some(false));
         assert_eq!(domain_props.expiry_date, None);
     }
