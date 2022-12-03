@@ -20,10 +20,19 @@ pub fn parse_icann_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a>
             continue;
         }
 
-        if line.starts_with("No match for domain \"") && line.ends_with("\".")
-            || line == "Domain not found."
-        {
+        if line == "Domain not found." {
             domain_props.is_registered = Some(false);
+            break;
+        }
+        if line.starts_with("No match for domain \"") && line.ends_with("\".") {
+            domain_props.is_registered = Some(false);
+
+            // Parse domain name while we're here
+            let re = Regex::new(r####"No match for domain "(.*)"."####).unwrap();
+            for caps in re.captures_iter(line) {
+                domain_props.domain_name = caps.get(1).unwrap().as_str();
+            }
+
             break;
         }
 
