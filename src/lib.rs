@@ -50,6 +50,8 @@ pub fn parse_domain_whois_info<'t>(
         return Ok(parse_icann_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".edu") {
         return Ok(parse_educause_domain_whois_info(whois_info));
+    } else if domain_name.ends_with(".fm") {
+        return Ok(parse_icann_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".gov") {
         return Ok(parse_dotgov_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".il") {

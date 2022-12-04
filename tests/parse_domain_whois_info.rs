@@ -155,6 +155,29 @@ mod passing {
     }
 
     #[test]
+    fn last_fm() {
+        let domain_name = "last.fm";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        match whoisthere::parse_domain_whois_info(domain_name, &whois_response) {
+            Ok(domain_props) => {
+                assert_eq!(domain_props.domain_name, "LAST.FM");
+                assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
+                assert_eq!(domain_props.is_registered, Some(true));
+                assert_eq!(
+                    domain_props.expiry_date,
+                    Some("2023-03-19T23:59:59+00:00".to_string())
+                );
+            }
+            Err(_) => {
+                assert!(false);
+            }
+        }
+    }
+
+    #[test]
     fn mit_edi() {
         let domain_name = "mit.edu";
         let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
