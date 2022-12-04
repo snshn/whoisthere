@@ -1,0 +1,34 @@
+[ JPRS database provides information on network administration. Its use is    ]
+[ restricted to network administration purposes. For further information,     ]
+[ use 'whois -h whois.jprs.jp help'. To suppress Japanese output, add'/e'     ]
+[ at the end of command, e.g. 'whois -h whois.jprs.jp xxx/e'.                 ]
+
+Domain Information:
+[Domain Name]                   FUJI.JP
+
+[Registrant]                    FUJI CORPORATION
+
+[Name Server]                   ns-517.awsdns-00.net
+[Name Server]                   ns-459.awsdns-57.com
+[Name Server]                   ns-2017.awsdns-60.co.uk
+[Name Server]                   ns-1086.awsdns-07.org
+[Signing Key]                   
+
+[Created on]                    2001/03/26
+[Expires on]                    2023/03/31
+[Status]                        Active
+[Last Updated]                  2022/04/01 01:05:09 (JST)
+
+Contact Information:
+[Name]                          FUJI CORPORATION
+[Email]                         ka.hayakawa@fuji.co.jp
+[Email]                         net-admin@fuji.co.jp
+[Web Page]                       
+[Postal code]                   472-8686
+[Postal Address]                Aichi
+                                Chiryu-shi, Yamamachi
+                                Chausuyama,19
+[Phone]                         0566-81-8256
+[Phone]                         0566-84-0027
+[Fax]                           
+

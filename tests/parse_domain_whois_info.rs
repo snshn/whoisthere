@@ -61,6 +61,30 @@ mod passing {
     }
 
     #[test]
+    fn fuji_jp() {
+        let domain_name = "fuji.jp";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        match whoisthere::parse_domain_whois_info(domain_name, &whois_response) {
+            Ok(domain_props) => {
+                assert_eq!(domain_props.domain_name, "FUJI.JP");
+                assert_eq!(domain_props.whois_service, Some(WhoisService::Jprs));
+                assert_eq!(domain_props.is_registered, Some(true));
+                assert_eq!(
+                    domain_props.expiry_date,
+                    Some("2023-03-31T00:00:00+00:00".to_string())
+                );
+                // assert_eq!(domain_props.registrar, Some("BARBERO-REG"));
+            }
+            Err(_) => {
+                assert!(false);
+            }
+        }
+    }
+
+    #[test]
     fn github_com() {
         let domain_name = "github.com";
         let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
@@ -311,7 +335,7 @@ mod failing {
         match whoisthere::parse_domain_whois_info(&domain_name, &whois_response) {
             Ok(domain_props) => {
                 assert_eq!(domain_props.domain_name, "EXPIRED.COM");
-                assert_eq!(domain_props.whois_service, Some(WhoisService::Icann)); // This is wrong
+                assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
                 assert_eq!(domain_props.is_registered, Some(true));
                 assert_eq!(
                     domain_props.expiry_date,
@@ -334,7 +358,7 @@ mod failing {
         match whoisthere::parse_domain_whois_info(domain_name, &whois_response) {
             Ok(domain_props) => {
                 assert_eq!(domain_props.domain_name, "unregistered.edu");
-                assert_eq!(domain_props.whois_service, Some(WhoisService::Educause)); // This is wrong
+                assert_eq!(domain_props.whois_service, Some(WhoisService::Educause));
                 assert_eq!(domain_props.is_registered, Some(false));
                 assert_eq!(domain_props.expiry_date, None);
             }
@@ -354,7 +378,7 @@ mod failing {
         match whoisthere::parse_domain_whois_info(domain_name, &whois_response) {
             Ok(domain_props) => {
                 assert_eq!(domain_props.domain_name, "UNREGISTERED.GOV");
-                assert_eq!(domain_props.whois_service, Some(WhoisService::Dotgov)); // This is wrong
+                assert_eq!(domain_props.whois_service, Some(WhoisService::Dotgov));
                 assert_eq!(domain_props.is_registered, Some(false));
                 assert_eq!(domain_props.expiry_date, None);
             }
@@ -374,7 +398,7 @@ mod failing {
         match whoisthere::parse_domain_whois_info(domain_name, &whois_response) {
             Ok(domain_props) => {
                 assert_eq!(domain_props.domain_name, "");
-                assert_eq!(domain_props.whois_service, Some(WhoisService::IsocIl)); // This is wrong
+                assert_eq!(domain_props.whois_service, Some(WhoisService::IsocIl));
                 assert_eq!(domain_props.is_registered, Some(false));
                 assert_eq!(domain_props.expiry_date, None);
             }
@@ -394,7 +418,27 @@ mod failing {
         match whoisthere::parse_domain_whois_info(domain_name, &whois_response) {
             Ok(domain_props) => {
                 assert_eq!(domain_props.domain_name, "unregistered.is");
-                assert_eq!(domain_props.whois_service, Some(WhoisService::Isnic)); // This is wrong
+                assert_eq!(domain_props.whois_service, Some(WhoisService::Isnic));
+                assert_eq!(domain_props.is_registered, Some(false));
+                assert_eq!(domain_props.expiry_date, None);
+            }
+            Err(_) => {
+                assert!(false);
+            }
+        }
+    }
+
+    #[test]
+    fn unregistered_jp() {
+        let domain_name = "unregistered.jp";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        match whoisthere::parse_domain_whois_info(domain_name, &whois_response) {
+            Ok(domain_props) => {
+                assert_eq!(domain_props.domain_name, "");
+                assert_eq!(domain_props.whois_service, Some(WhoisService::Jprs));
                 assert_eq!(domain_props.is_registered, Some(false));
                 assert_eq!(domain_props.expiry_date, None);
             }
@@ -414,7 +458,7 @@ mod failing {
         match whoisthere::parse_domain_whois_info(domain_name, &whois_response) {
             Ok(domain_props) => {
                 assert_eq!(domain_props.domain_name, "");
-                assert_eq!(domain_props.whois_service, Some(WhoisService::Krnic)); // This is wrong
+                assert_eq!(domain_props.whois_service, Some(WhoisService::Krnic));
                 assert_eq!(domain_props.is_registered, Some(false));
                 assert_eq!(domain_props.expiry_date, None);
             }
@@ -434,7 +478,7 @@ mod failing {
         match whoisthere::parse_domain_whois_info(domain_name, &whois_response) {
             Ok(domain_props) => {
                 assert_eq!(domain_props.domain_name, "");
-                assert_eq!(domain_props.whois_service, Some(WhoisService::Rnids)); // This is wrong
+                assert_eq!(domain_props.whois_service, Some(WhoisService::Rnids));
                 assert_eq!(domain_props.is_registered, Some(false));
                 assert_eq!(domain_props.expiry_date, None);
             }
@@ -454,7 +498,7 @@ mod failing {
         match whoisthere::parse_domain_whois_info(domain_name, &whois_response) {
             Ok(domain_props) => {
                 assert_eq!(domain_props.domain_name, "");
-                assert_eq!(domain_props.whois_service, Some(WhoisService::Icann)); // This is wrong
+                assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
                 assert_eq!(domain_props.is_registered, Some(false));
                 assert_eq!(domain_props.expiry_date, None);
             }
@@ -474,7 +518,7 @@ mod failing {
         match whoisthere::parse_domain_whois_info(domain_name, &whois_response) {
             Ok(domain_props) => {
                 assert_eq!(domain_props.domain_name, "");
-                assert_eq!(domain_props.whois_service, Some(WhoisService::Nominet)); // This is wrong
+                assert_eq!(domain_props.whois_service, Some(WhoisService::Nominet));
                 assert_eq!(domain_props.is_registered, Some(false));
                 assert_eq!(domain_props.expiry_date, None);
             }
