@@ -1,0 +1,49 @@
+query : nvidia.kr
+
+
+# KOREAN(UTF8)
+
+도메인이름                  : nvidia.kr
+등록인                      : 리앤목 특허법인
+책임자                      : 리앤목 특허법인
+책임자 전자우편             : suhwan@leemock.com
+등록일                      : 2015. 07. 24.
+최근 정보 변경일            : 2016. 06. 14.
+사용 종료일                 : 2023. 07. 24.
+정보공개여부                : N
+등록대행자                  : (주)가비아(http://www.gabia.co.kr)
+DNSSEC                      : 미서명
+
+1차 네임서버 정보
+   호스트이름               : dns1.idp365.net
+
+2차 네임서버 정보
+   호스트이름               : dns2.idp365.net
+   호스트이름               : dns3.idp365.net
+
+네임서버 이름이 .kr이 아닌 경우는 IP주소가 보이지 않습니다.
+
+
+# ENGLISH
+
+Domain Name                 : nvidia.kr
+Registrant                  : Y. P. Lee, Mock & Partners
+Administrative Contact(AC)  : Y. P. Lee, Mock & Partners
+AC E-Mail                   : suhwan@leemock.com
+Registered Date             : 2015. 07. 24.
+Last Updated Date           : 2016. 06. 14.
+Expiration Date             : 2023. 07. 24.
+Publishes                   : N
+Authorized Agency           : Gabia, Inc.(http://www.gabia.co.kr)
+DNSSEC                      : unsigned
+
+Primary Name Server
+   Host Name                : dns1.idp365.net
+
+Secondary Name Server
+   Host Name                : dns2.idp365.net
+   Host Name                : dns3.idp365.net
+
+
+- KISA/KRNIC WHOIS Service -
+

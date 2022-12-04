@@ -5,6 +5,7 @@ use crate::parsers::educause::parse_educause_domain_whois_info;
 use crate::parsers::icann::parse_icann_domain_whois_info;
 use crate::parsers::isnic::parse_isnic_domain_whois_info;
 use crate::parsers::isocil::parse_isocil_domain_whois_info;
+use crate::parsers::krnic::parse_krnic_domain_whois_info;
 use crate::parsers::nicit::parse_nicit_domain_whois_info;
 use crate::parsers::nominet::parse_nominet_domain_whois_info;
 use crate::parsers::rnids::parse_rnids_domain_whois_info;
@@ -17,6 +18,7 @@ pub enum WhoisService {
     Icann,
     Isnic,
     IsocIl,
+    Krnic,
     NicIt,
     Nominet,
     Rnids,
@@ -70,6 +72,12 @@ pub fn parse_domain_whois_info<'t>(domain_name: &'t str, whois_info: &'t str) ->
         return domain_info;
     } else if domain_name.ends_with(".it") {
         let mut domain_info = parse_nicit_domain_whois_info(whois_info);
+        if domain_info.domain_name == "" {
+            domain_info.domain_name = domain_name;
+        }
+        return domain_info;
+    } else if domain_name.ends_with(".kr") {
+        let mut domain_info = parse_krnic_domain_whois_info(whois_info);
         if domain_info.domain_name == "" {
             domain_info.domain_name = domain_name;
         }

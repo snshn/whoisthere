@@ -3,6 +3,7 @@ pub mod educause;
 pub mod icann;
 pub mod isnic;
 pub mod isocil;
+pub mod krnic;
 pub mod nicit;
 pub mod nominet;
 pub mod rnids;
