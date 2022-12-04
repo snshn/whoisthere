@@ -25,6 +25,11 @@ pub enum WhoisService {
     Tcinet,
 }
 
+#[derive(Debug, Eq, PartialEq)]
+pub enum WhoIsThereError {
+    UnsupportedTld,
+}
+
 pub struct DomainProps<'t> {
     pub domain_name: &'t str,
     pub whois_service: Option<WhoisService>,
@@ -33,79 +38,35 @@ pub struct DomainProps<'t> {
     pub registrar: Option<&'t str>,
 }
 
-pub fn parse_domain_whois_info<'t>(domain_name: &'t str, whois_info: &'t str) -> DomainProps<'t> {
+pub fn parse_domain_whois_info<'t>(
+    domain_name: &'t str,
+    whois_info: &'t str,
+) -> Result<DomainProps<'t>, WhoIsThereError> {
     if domain_name.ends_with(".com") {
-        let mut domain_info = parse_icann_domain_whois_info(whois_info);
-        if domain_info.domain_name == "" {
-            domain_info.domain_name = domain_name;
-        }
-        return domain_info;
+        return Ok(parse_icann_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".edu") {
-        let mut domain_info = parse_educause_domain_whois_info(whois_info);
-        if domain_info.domain_name == "" {
-            domain_info.domain_name = domain_name;
-        }
-        return domain_info;
+        return Ok(parse_educause_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".gov") {
-        let mut domain_info = parse_dotgov_domain_whois_info(whois_info);
-        if domain_info.domain_name == "" {
-            domain_info.domain_name = domain_name;
-        }
-        return domain_info;
+        return Ok(parse_dotgov_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".il") {
-        let mut domain_info = parse_isocil_domain_whois_info(whois_info);
-        if domain_info.domain_name == "" {
-            domain_info.domain_name = domain_name;
-        }
-        return domain_info;
+        return Ok(parse_isocil_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".io") {
-        let mut domain_info = parse_icann_domain_whois_info(whois_info);
-        if domain_info.domain_name == "" {
-            domain_info.domain_name = domain_name;
-        }
-        return domain_info;
+        return Ok(parse_icann_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".is") {
-        let mut domain_info = parse_isnic_domain_whois_info(whois_info);
-        if domain_info.domain_name == "" {
-            domain_info.domain_name = domain_name;
-        }
-        return domain_info;
+        return Ok(parse_isnic_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".it") {
-        let mut domain_info = parse_nicit_domain_whois_info(whois_info);
-        if domain_info.domain_name == "" {
-            domain_info.domain_name = domain_name;
-        }
-        return domain_info;
+        return Ok(parse_nicit_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".kr") {
-        let mut domain_info = parse_krnic_domain_whois_info(whois_info);
-        if domain_info.domain_name == "" {
-            domain_info.domain_name = domain_name;
-        }
-        return domain_info;
+        return Ok(parse_krnic_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".rs") {
-        let mut domain_info = parse_rnids_domain_whois_info(whois_info);
-        if domain_info.domain_name == "" {
-            domain_info.domain_name = domain_name;
-        }
-        return domain_info;
+        return Ok(parse_rnids_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".ru") {
-        let mut domain_info = parse_tcinet_domain_whois_info(whois_info);
-        if domain_info.domain_name == "" {
-            domain_info.domain_name = domain_name;
-        }
-        return domain_info;
+        return Ok(parse_tcinet_domain_whois_info(whois_info));
+    } else if domain_name.ends_with(".social") {
+        return Ok(parse_icann_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".uk") {
-        let mut domain_info = parse_nominet_domain_whois_info(whois_info);
-        if domain_info.domain_name == "" {
-            domain_info.domain_name = domain_name;
-        }
-        return domain_info;
-    } else {
-        // // Everything else should fall onto ICANN
-        let mut domain_info = parse_icann_domain_whois_info(whois_info);
-        if domain_info.domain_name == "" {
-            domain_info.domain_name = domain_name;
-        }
-        return domain_info;
+        return Ok(parse_nominet_domain_whois_info(whois_info));
     }
+
+    Err(WhoIsThereError::UnsupportedTld)
 }
