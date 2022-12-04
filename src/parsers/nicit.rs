@@ -40,7 +40,7 @@ pub fn parse_nicit_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a>
             for caps in re.captures_iter(line) {
                 let naive_date =
                     NaiveDate::parse_from_str(caps.get(1).unwrap().as_str(), "%Y-%m-%d").unwrap();
-                let naive_datetime: NaiveDateTime = naive_date.and_hms(0, 0, 0);
+                let naive_datetime: NaiveDateTime = naive_date.and_hms_opt(0, 0, 0).unwrap();
                 let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
                 domain_props.expiry_date = Some(datetime_utc.to_rfc3339());
                 domain_props.is_registered = Some(true);
