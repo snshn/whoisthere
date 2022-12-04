@@ -46,6 +46,8 @@ pub fn parse_domain_whois_info<'t>(
 ) -> Result<DomainProps<'t>, WhoIsThereError> {
     if domain_name.ends_with(".com") {
         return Ok(parse_icann_domain_whois_info(whois_info));
+    } else if domain_name.ends_with(".co") {
+        return Ok(parse_icann_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".edu") {
         return Ok(parse_educause_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".gov") {

@@ -13,6 +13,30 @@ mod passing {
     use whoisthere::WhoisService;
 
     #[test]
+    fn angel_co() {
+        let domain_name = "angel.co";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        match whoisthere::parse_domain_whois_info(domain_name, &whois_response) {
+            Ok(domain_props) => {
+                assert_eq!(domain_props.domain_name, "angel.co");
+                assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
+                assert_eq!(domain_props.is_registered, Some(true));
+                assert_eq!(
+                    domain_props.expiry_date,
+                    Some("2024-04-21T23:59:59+00:00".to_string())
+                );
+                assert_eq!(domain_props.registrar, Some("CCI REG S.A."));
+            }
+            Err(_) => {
+                assert!(false);
+            }
+        }
+    }
+
+    #[test]
     fn crates_io() {
         let domain_name = "crates.io";
         let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
