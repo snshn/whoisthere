@@ -69,6 +69,24 @@ mod passing {
     }
 
     #[test]
+    fn nvidia_kr() {
+        let domain_name = "nvidia.kr";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "nvidia.kr");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Krnic));
+        assert_eq!(domain_props.is_registered, Some(true));
+        assert_eq!(
+            domain_props.expiry_date,
+            Some("2023-07-24T00:00:00+00:00".to_string())
+        );
+    }
+
+    #[test]
     fn mit_edi() {
         let domain_name = "mit.edu";
         let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
@@ -301,6 +319,21 @@ mod failing {
 
         assert_eq!(domain_props.domain_name, "unregistered.is");
         assert_eq!(domain_props.whois_service, Some(WhoisService::Isnic)); // This is wrong
+        assert_eq!(domain_props.is_registered, Some(false));
+        assert_eq!(domain_props.expiry_date, None);
+    }
+
+    #[test]
+    fn unregistered_kr() {
+        let domain_name = "unregistered.kr";
+        let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
+        let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
+        let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
+            .expect("Something went wrong reading the file");
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response);
+
+        assert_eq!(domain_props.domain_name, "unregistered.kr");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Krnic)); // This is wrong
         assert_eq!(domain_props.is_registered, Some(false));
         assert_eq!(domain_props.expiry_date, None);
     }
