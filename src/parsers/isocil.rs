@@ -4,13 +4,10 @@ use regex::Regex;
 
 use crate::{DomainProps, WhoisService};
 
-pub fn parse_isocil_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
+pub fn parse_isocil_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
     let mut domain_props = DomainProps {
-        domain_name: "",
         whois_service: Some(WhoisService::IsocIl),
-        is_registered: None,
-        expiry_date: None,
-        registrar: None,
+        ..Default::default()
     };
 
     let lines = whois_info.lines();
@@ -24,7 +21,7 @@ pub fn parse_isocil_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a
     }
 
     for line in lines {
-        if line == "" {
+        if line.is_empty() {
             continue;
         }
 
@@ -32,11 +29,11 @@ pub fn parse_isocil_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a
         if line.starts_with("domain:") {
             let re = Regex::new(r"domain:\s+(.*)").unwrap();
             for caps in re.captures_iter(line) {
-                domain_props.domain_name = caps.get(1).unwrap().as_str();
+                domain_props.name = caps.get(1).unwrap().as_str();
             }
             continue;
         }
     }
 
-    return domain_props;
+    domain_props
 }

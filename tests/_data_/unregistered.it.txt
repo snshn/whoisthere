@@ -1,0 +1,2 @@
+Domain:             unregistered.it
+Status:             AVAILABLE

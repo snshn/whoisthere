@@ -28,25 +28,35 @@ pub enum WhoisService {
 }
 
 #[derive(Debug, Eq, PartialEq)]
+pub enum DomainStatus {
+    Active,                  // Bought and paid for (unexpired)
+    ExpiredGracePeriod,      // Expired (typically day 1–30, sometimes 1–45)
+    ExpiredRedemptionPeriod, // Expired (30 more days after grace period)
+    ExpiredPendingDelete,    // Expired (5 more days on top of grace and redemption periods)
+}
+
+#[derive(Debug, Eq, PartialEq)]
 pub enum WhoIsThereError {
     UnsupportedTld,
 }
 
+#[derive(Default)]
 pub struct DomainProps<'t> {
-    pub domain_name: &'t str,
+    pub name: &'t str,
     pub whois_service: Option<WhoisService>,
     pub is_registered: Option<bool>,
     pub expiry_date: Option<String>,
     pub registrar: Option<&'t str>,
+    pub status: Option<DomainStatus>,
 }
 
 pub fn parse_domain_whois_info<'t>(
     domain_name: &'t str,
     whois_info: &'t str,
 ) -> Result<DomainProps<'t>, WhoIsThereError> {
-    if domain_name.ends_with(".com") {
+    if domain_name.ends_with(".co") {
         return Ok(parse_icann_domain_whois_info(whois_info));
-    } else if domain_name.ends_with(".co") {
+    } else if domain_name.ends_with(".com") {
         return Ok(parse_icann_domain_whois_info(whois_info));
     } else if domain_name.ends_with(".edu") {
         return Ok(parse_educause_domain_whois_info(whois_info));

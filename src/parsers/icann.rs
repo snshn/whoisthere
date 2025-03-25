@@ -3,21 +3,18 @@
 use chrono::{DateTime, Utc};
 use regex::Regex;
 
-use crate::{DomainProps, WhoisService};
+use crate::{DomainProps, DomainStatus, WhoisService};
 
-pub fn parse_icann_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
+pub fn parse_icann_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
     let mut domain_props = DomainProps {
-        domain_name: "",
         whois_service: Some(WhoisService::Icann),
-        is_registered: None,
-        expiry_date: None,
-        registrar: None,
+        ..Default::default()
     };
 
     let lines = whois_info.lines();
 
     for line in lines {
-        if line == "" {
+        if line.is_empty() {
             continue;
         }
 
@@ -31,7 +28,7 @@ pub fn parse_icann_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a>
             // Parse domain name while we're here
             let re = Regex::new(r####"No match for domain "(.*)"."####).unwrap();
             for caps in re.captures_iter(line) {
-                domain_props.domain_name = caps.get(1).unwrap().as_str();
+                domain_props.name = caps.get(1).unwrap().as_str();
             }
 
             break;
@@ -64,11 +61,30 @@ pub fn parse_icann_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a>
         if line_trimmed.starts_with("Domain Name: ") {
             let re = Regex::new(r"Domain Name:\s+(.*)").unwrap();
             for caps in re.captures_iter(line_trimmed) {
-                domain_props.domain_name = caps.get(1).unwrap().as_str();
+                domain_props.name = caps.get(1).unwrap().as_str();
             }
             continue;
         }
+
+        // Parse domain status
+        if line_trimmed.starts_with("Domain Status: ") {
+            let re = Regex::new(r"Domain Status:\s+(.*)").unwrap();
+            for caps in re.captures_iter(line_trimmed) {
+                let domain_status_value = caps.get(1).unwrap().as_str();
+                if domain_status_value.starts_with("redemptionPeriod") {
+                    domain_props.status = Some(DomainStatus::ExpiredRedemptionPeriod);
+                } /*else if domain_status_value.starts_with("clientTransferProhibited")
+                {
+                domain_props.status = Some(DomainStatus::Registered);
+                }*/
+            }
+            continue;
+        }
+
+        if domain_props.status.is_none() {
+            domain_props.status = Some(DomainStatus::Active);
+        }
     }
 
-    return domain_props;
+    domain_props
 }

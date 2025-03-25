@@ -3,21 +3,18 @@
 use chrono::{DateTime, Utc};
 use regex::Regex;
 
-use crate::{DomainProps, WhoisService};
+use crate::{DomainProps, DomainStatus, WhoisService};
 
-pub fn parse_tcinet_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
+pub fn parse_tcinet_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
     let mut domain_props = DomainProps {
-        domain_name: "",
         whois_service: Some(WhoisService::Tcinet),
-        is_registered: None,
-        expiry_date: None,
-        registrar: None,
+        ..Default::default()
     };
 
     let lines = whois_info.lines();
 
     for line in lines {
-        if line == "" {
+        if line.is_empty() {
             continue;
         }
 
@@ -51,11 +48,24 @@ pub fn parse_tcinet_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a
         if line.starts_with("domain:") {
             let re = Regex::new(r"domain:\s+(.*)").unwrap();
             for caps in re.captures_iter(line) {
-                domain_props.domain_name = caps.get(1).unwrap().as_str();
+                domain_props.name = caps.get(1).unwrap().as_str();
+            }
+            continue;
+        }
+
+        // Parse domain status
+        if line.starts_with("state:") {
+            let re = Regex::new(r"state:\s+(.*)").unwrap();
+            for caps in re.captures_iter(line) {
+                let domain_status_value = caps.get(1).unwrap().as_str();
+                let domain_status_values: Vec<&str> = domain_status_value.split(", ").collect();
+                if domain_status_values.contains(&"REGISTERED") {
+                    domain_props.status = Some(DomainStatus::Active);
+                }
             }
             continue;
         }
     }
 
-    return domain_props;
+    domain_props
 }

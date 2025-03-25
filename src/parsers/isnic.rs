@@ -5,19 +5,16 @@ use regex::Regex;
 
 use crate::{DomainProps, WhoisService};
 
-pub fn parse_isnic_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a> {
+pub fn parse_isnic_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
     let mut domain_props = DomainProps {
-        domain_name: "",
         whois_service: Some(WhoisService::Isnic),
-        is_registered: None,
-        expiry_date: None,
-        registrar: None,
+        ..Default::default()
     };
 
     let lines = whois_info.lines();
 
     for line in lines {
-        if line == "" {
+        if line.is_empty() {
             continue;
         }
 
@@ -27,7 +24,7 @@ pub fn parse_isnic_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a>
             // Parse domain name while we're here
             let re = Regex::new(r####"% No entries found for query "(.*)"."####).unwrap();
             for caps in re.captures_iter(line) {
-                domain_props.domain_name = caps.get(1).unwrap().as_str();
+                domain_props.name = caps.get(1).unwrap().as_str();
             }
 
             break;
@@ -50,11 +47,11 @@ pub fn parse_isnic_domain_whois_info<'a>(whois_info: &'a str) -> DomainProps<'a>
         if line.starts_with("domain:") {
             let re = Regex::new(r"domain:\s+(.*)").unwrap();
             for caps in re.captures_iter(line) {
-                domain_props.domain_name = caps.get(1).unwrap().as_str();
+                domain_props.name = caps.get(1).unwrap().as_str();
             }
             continue;
         }
     }
 
-    return domain_props;
+    domain_props
 }
