@@ -42,21 +42,24 @@ assert_eq!(domain_props.status, Some(DomainStatus::Active));
 
 ## Supported TLDs
 
-| TLD                                                                                     | WHOIS service |
-|-----------------------------------------------------------------------------------------|---------------|
-| `.ai`, `.ca`, `.cc`, `.co`, `.com`, `.fm`, `.io`, `.me`, `.sh`, `.social`, `.tv`, `.us` | ICANN format  |
-| `.edu`                                                                                  | EDUCAUSE      |
-| `.gov`                                                                                  | DOTGOV        |
-| `.il`                                                                                   | ISOC-IL       |
-| `.is`                                                                                   | ISNIC         |
-| `.it`                                                                                   | NIC-IT        |
-| `.jp`                                                                                   | JPRS          |
-| `.kr`                                                                                   | KRNIC         |
-| `.rs`                                                                                   | RNIDS         |
-| `.ru`                                                                                   | TCINET        |
-| `.uk`                                                                                   | Nominet       |
+| TLD                                                                  | WHOIS service |
+|----------------------------------------------------------------------|---------------|
+| gTLDs (`.com`, `.org`, `.xxx`, `.xyz`, …)                            | ICANN format  |
+| `.ai`, `.ca`, `.cc`, `.co`, `.fm`, `.io`, `.me`, `.sh`, `.tv`, `.us` | ICANN format  |
+| `.edu`                                                               | EDUCAUSE      |
+| `.gov`                                                               | DOTGOV        |
+| `.il`                                                                | ISOC-IL       |
+| `.is`                                                                | ISNIC         |
+| `.it`                                                                | NIC-IT        |
+| `.jp`                                                                | JPRS          |
+| `.kr`                                                                | KRNIC         |
+| `.rs`                                                                | RNIDS         |
+| `.ru`                                                                | TCINET        |
+| `.uk`                                                                | Nominet       |
 
-Other TLDs return `Err(WhoIsThereError::UnsupportedTld)`.
+Other ccTLDs, internationalized (`xn--`) TLDs, `.arpa`, `.int` and `.mil` return `Err(WhoIsThereError::UnsupportedTld)`.
+
+Since January 2025, gTLD registries no longer have to run WHOIS (only RDAP), and many have shut it down.
 
 
 ---------------------------------------------------

@@ -1,0 +1,14 @@
+Domain Name: chomikuj.xxx
+Registry Domain ID: REDACTED FOR PRIVACY
+Registrar WHOIS Server: whois.marcaria.com
+Registrar URL: www.marcaria.com
+Updated Date: 2025-11-08T07:53:55Z
+Creation Date: 2011-12-06T20:23:45Z
+Registry Expiry Date: 2026-12-06T20:23:45Z
+Registrar: Marcaria International LLC
+Registrar IANA ID: 1086
+Registrar Abuse Contact Email: [email protected]
+Registrar Abuse Contact Phone: +1.3054348621
+Domain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited
+Registry Registrant ID: REDACTED FOR PRIVACY
+Registrant Name: REDACTED FOR PRIVACY

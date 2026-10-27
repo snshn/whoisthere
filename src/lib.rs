@@ -92,8 +92,8 @@ pub fn parse_domain_whois_info<'t>(
         .ok_or(WhoIsThereError::UnsupportedTld)?;
 
     let parse = match tld.as_str() {
-        // gTLDs, plus ccTLDs whose registries use the ICANN format
-        "ai" | "ca" | "cc" | "co" | "com" | "fm" | "io" | "me" | "sh" | "social" | "tv" | "us" => {
+        // ccTLDs whose registries use the ICANN format
+        "ai" | "ca" | "cc" | "co" | "fm" | "io" | "me" | "sh" | "tv" | "us" => {
             parse_icann_domain_whois_info
         }
         "edu" => parse_educause_domain_whois_info,
@@ -106,6 +106,14 @@ pub fn parse_domain_whois_info<'t>(
         "rs" => parse_rnids_domain_whois_info,
         "ru" => parse_tcinet_domain_whois_info,
         "uk" => parse_nominet_domain_whois_info,
+        // Not under contract with ICANN, and no ICANN-format WHOIS
+        "arpa" | "int" | "mil" => return Err(WhoIsThereError::UnsupportedTld),
+        // Every other gTLD: registries under contract with ICANN must use its format.
+        // Two-letter TLDs are country codes, and internationalized ("xn--") TLDs
+        // include country codes too, so those stay unsupported unless listed above.
+        gtld if gtld.len() > 2 && gtld.bytes().all(|b| b.is_ascii_lowercase()) => {
+            parse_icann_domain_whois_info
+        }
         _ => return Err(WhoIsThereError::UnsupportedTld),
     };
 

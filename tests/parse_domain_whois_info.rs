@@ -147,6 +147,49 @@ mod passing {
     }
 
     #[test]
+    fn chomikuj_xxx() {
+        let domain_name = "chomikuj.xxx";
+        let whois_response = fixture(domain_name);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response)
+            .expect("TLD should be supported");
+        assert_eq!(domain_props.name, "chomikuj.xxx");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
+        assert_eq!(domain_props.is_registered, Some(true));
+        assert_eq!(
+            domain_props.expiry_date,
+            Some("2026-12-06T20:23:45+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, Some("Marcaria International LLC"));
+        assert_eq!(domain_props.status, Some(DomainStatus::Active));
+    }
+
+    #[test]
+    fn centralnic_xyz_fractional_seconds() {
+        // Excerpt (no Domain Name line); CentralNic writes timestamps like 23:59:59.0Z
+        let domain_name = "19971003.xyz";
+        let whois_response = fixture(domain_name);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response)
+            .expect("TLD should be supported");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
+        assert_eq!(domain_props.is_registered, Some(true));
+        assert_eq!(
+            domain_props.expiry_date,
+            Some("2026-08-28T23:59:59+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, Some("DNSPod, Inc."));
+        assert_eq!(domain_props.status, Some(DomainStatus::Active));
+    }
+
+    #[test]
+    fn any_gtld_uses_icann_parser() {
+        for domain_name in ["example.dhl", "example.org", "EXAMPLE.Photography."] {
+            let domain_props = whoisthere::parse_domain_whois_info(domain_name, "")
+                .expect("gTLD should be supported");
+            assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
+        }
+    }
+
+    #[test]
     fn crates_io() {
         let domain_name = "crates.io";
         let whois_response = fixture(domain_name);
@@ -405,7 +448,18 @@ mod failing {
 
     #[test]
     fn unsupported_tlds() {
-        for domain_name in ["com", ".", "example.zzz", "example.com.zzz", "examplecom"] {
+        for domain_name in [
+            "com",
+            ".",
+            "example.de",
+            "example.com.de",
+            "examplecom",
+            "example.int",
+            "example.mil",
+            "1.in-addr.arpa",
+            "example.xn--p1ai",
+            "example.c0m",
+        ] {
             assert_eq!(
                 whoisthere::parse_domain_whois_info(domain_name, "").err(),
                 Some(WhoIsThereError::UnsupportedTld),
@@ -418,7 +472,7 @@ mod failing {
     #[test]
     fn error_is_std_error() {
         let error: Box<dyn std::error::Error> =
-            Box::new(whoisthere::parse_domain_whois_info("example.zzz", "").unwrap_err());
+            Box::new(whoisthere::parse_domain_whois_info("example.de", "").unwrap_err());
         assert_eq!(error.to_string(), "unsupported top-level domain");
     }
 
