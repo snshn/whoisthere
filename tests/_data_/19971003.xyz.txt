@@ -1,0 +1,24 @@
+Registry Domain ID: D482068326-CNIC
+Registrar WHOIS Server: whois.dnspod.com
+Registrar URL: http://www.dnspod.cn
+Updated Date: 2025-09-01T10:42:58.0Z
+Creation Date: 2024-08-28T13:29:16.0Z
+Registry Expiry Date: 2026-08-28T23:59:59.0Z
+Registrar: DNSPod, Inc.
+Registrar IANA ID: 1697
+Domain Status: ok https://icann.org/epp#ok
+Name Server: EVE.NS.CLOUDFLARE.COM
+Name Server: ALAN.NS.CLOUDFLARE.COM
+DNSSEC: unsigned
+Registrar Abuse Contact Email: [email protected]
+Registrar Abuse Contact Phone: +86.4009100100
+URL of the ICANN Whois Inaccuracy Complaint Form: https://www.icann.org/wicf/
+>>> Last update of WHOIS database: 2026-06-27T07:29:29.0Z <<<
+
+For more information on Whois status codes, please visit https://icann.org/epp
+
+>>> IMPORTANT INFORMATION ABOUT THE DEPLOYMENT OF RDAP: please visit
+https://www.centralnicregistry.com/support/information/rdap <<<
+
+The registration data available in this service is limited. Additional
+data may be available at https://lookup.icann.org
