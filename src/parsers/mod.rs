@@ -9,3 +9,4 @@ pub mod nicit;
 pub mod nominet;
 pub mod rnids;
 pub mod tcinet;
+mod util;

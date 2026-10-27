@@ -1,7 +1,6 @@
 // DOTGOV: .gov
 
-use regex::Regex;
-
+use super::util::{between, value_after};
 use crate::{DomainProps, DomainStatus, WhoisService};
 
 pub fn parse_dotgov_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
@@ -10,49 +9,25 @@ pub fn parse_dotgov_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
         ..Default::default()
     };
 
-    let lines = whois_info.lines();
-
-    for line in lines {
+    for line in whois_info.lines() {
         if line.is_empty() {
             continue;
         }
 
-        if line.starts_with("No match for \"") && line.ends_with("\".") {
+        if let Some(name) = between(line, "No match for \"", "\".") {
             domain_props.is_registered = Some(false);
-
-            // Parse domain name while we're here
-            let re = Regex::new(r####"No match for "(.*)"."####).unwrap();
-            for caps in re.captures_iter(line) {
-                domain_props.name = caps.get(1).unwrap().as_str();
-            }
-
+            domain_props.name = name;
             break;
         }
 
         domain_props.is_registered = Some(true);
 
-        let line_trimmed = line.trim();
+        let line = line.trim();
 
-        // Parse domain name
-        if line_trimmed.starts_with("Domain Name: ") {
-            let re = Regex::new(r"Domain Name:\s+(.*)").unwrap();
-            for caps in re.captures_iter(line_trimmed) {
-                domain_props.name = caps.get(1).unwrap().as_str();
-            }
-            continue;
-        }
-
-        // Parse domain status
-        if line_trimmed.starts_with("Status: ") {
-            let re = Regex::new(r"Status:\s+(.*)").unwrap();
-            for caps in re.captures_iter(line_trimmed) {
-                let domain_status_value = caps.get(1).unwrap().as_str();
-                let domain_status_value = caps.get(1).unwrap().as_str();
-                if domain_status_value.starts_with("ACTIVE") {
-                    domain_props.status = Some(DomainStatus::Active);
-                }
-            }
-            continue;
+        if let Some(name) = value_after(line, "Domain Name:") {
+            domain_props.name = name;
+        } else if value_after(line, "Status:").is_some_and(|s| s.starts_with("ACTIVE")) {
+            domain_props.status = Some(DomainStatus::Active);
         }
     }
 

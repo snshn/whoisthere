@@ -1,37 +1,30 @@
 // ISOC-IL: .il
 
-use regex::Regex;
-
+use super::util::{date_to_rfc3339, value_after};
 use crate::{DomainProps, WhoisService};
 
 pub fn parse_isocil_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
     let mut domain_props = DomainProps {
         whois_service: Some(WhoisService::IsocIl),
+        // Unregistered domains get only the "%" comment banner, with no record
+        is_registered: Some(false),
         ..Default::default()
     };
 
-    let lines = whois_info.lines();
-
-    // Domain not registered, return basic info
-    if lines.clone().count() == 15 {
-        domain_props.is_registered = Some(false);
-        return domain_props;
-    } else {
-        domain_props.is_registered = Some(true);
-    }
-
-    for line in lines {
-        if line.is_empty() {
-            continue;
-        }
-
-        // Parse domain name
-        if line.starts_with("domain:") {
-            let re = Regex::new(r"domain:\s+(.*)").unwrap();
-            for caps in re.captures_iter(line) {
-                domain_props.name = caps.get(1).unwrap().as_str();
+    for line in whois_info.lines() {
+        // Contact and registrar objects follow the domain object and have their own
+        // "changed:" etc. fields, so only take the first occurrence of each field
+        if let Some(name) = value_after(line, "domain:") {
+            if domain_props.name.is_empty() {
+                domain_props.name = name;
+                domain_props.is_registered = Some(true);
             }
-            continue;
+        } else if let Some(validity) = value_after(line, "validity:") {
+            if domain_props.expiry_date.is_none() {
+                domain_props.expiry_date = date_to_rfc3339(validity, "%d-%m-%Y");
+            }
+        } else if let Some(registrar) = value_after(line, "registrar name:") {
+            domain_props.registrar.get_or_insert(registrar);
         }
     }
 

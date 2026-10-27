@@ -1,8 +1,6 @@
 // KRNIC: .kr
 
-use chrono::{DateTime, NaiveDate, NaiveDateTime, Utc};
-use regex::Regex;
-
+use super::util::{date_to_rfc3339, padded_value};
 use crate::{DomainProps, WhoisService};
 
 pub fn parse_krnic_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
@@ -11,9 +9,7 @@ pub fn parse_krnic_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
         ..Default::default()
     };
 
-    let lines = whois_info.lines();
-
-    for line in lines {
+    for line in whois_info.lines() {
         if line.is_empty() {
             continue;
         }
@@ -24,27 +20,15 @@ pub fn parse_krnic_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
             break;
         }
 
-        // Parse domain name
-        if line.starts_with("Domain Name") {
-            let re = Regex::new(r"Domain Name\s+:\s(.*)").unwrap();
-            for caps in re.captures_iter(line) {
-                domain_props.name = caps.get(1).unwrap().as_str();
-            }
-            continue;
-        }
-
-        if line.starts_with("Expiration Date") {
-            let re = Regex::new(r"Expiration Date\s+:\s(.*)").unwrap();
-            for caps in re.captures_iter(line) {
-                let naive_date =
-                    NaiveDate::parse_from_str(caps.get(1).unwrap().as_str(), "%Y. %m. %d.")
-                        .unwrap();
-                let naive_datetime: NaiveDateTime = naive_date.and_hms_opt(0, 0, 0).unwrap();
-                let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
-                domain_props.expiry_date = Some(datetime_utc.to_rfc3339());
-                domain_props.is_registered = Some(true);
-            }
-            continue;
+        if let Some(name) = padded_value(line, "Domain Name") {
+            domain_props.name = name;
+        } else if let Some(agency) = padded_value(line, "Authorized Agency") {
+            // "Gabia, Inc.(http://www.gabia.co.kr)"
+            let name = agency.split_once("(http").map_or(agency, |(name, _)| name);
+            domain_props.registrar = Some(name.trim_end());
+        } else if let Some(expires) = padded_value(line, "Expiration Date") {
+            domain_props.expiry_date = date_to_rfc3339(expires, "%Y. %m. %d.");
+            domain_props.is_registered = Some(true);
         }
     }
 

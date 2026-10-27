@@ -1,8 +1,6 @@
 // NIC-IT: .it
 
-use chrono::{DateTime, NaiveDate, NaiveDateTime, Utc};
-use regex::Regex;
-
+use super::util::{date_to_rfc3339, value_after};
 use crate::{DomainProps, DomainStatus, WhoisService};
 
 pub fn parse_nicit_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
@@ -11,49 +9,40 @@ pub fn parse_nicit_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
         ..Default::default()
     };
 
-    let lines = whois_info.lines();
+    let mut section = "";
 
-    for line in lines {
+    for line in whois_info.lines() {
         if line.is_empty() {
             continue;
         }
 
-        // Parse name
-        if line.starts_with("Domain: ") {
-            let re = Regex::new(r"Domain:\s+(.*)").unwrap();
-            for caps in re.captures_iter(line) {
-                domain_props.name = caps.get(1).unwrap().as_str();
+        // Contact sections ("Registrant", "Registrar", …) are unindented headers
+        // followed by indented fields
+        if !line.starts_with(' ') && !line.contains(':') {
+            section = line.trim();
+            continue;
+        }
+
+        if line.starts_with(' ') {
+            if section == "Registrar" {
+                domain_props.registrar =
+                    value_after(line.trim(), "Name:").or(domain_props.registrar);
             }
             continue;
         }
 
-        // Parse expiry date
-        if line.starts_with("Expire Date:") {
-            let re = Regex::new(r"Expire Date:\s+(.*)").unwrap();
-            for caps in re.captures_iter(line) {
-                // TODO: find out what kind of time zone is used by this NIC
-                let naive_date =
-                    NaiveDate::parse_from_str(caps.get(1).unwrap().as_str(), "%Y-%m-%d").unwrap();
-                let naive_datetime: NaiveDateTime = naive_date.and_hms_opt(0, 0, 0).unwrap();
-                let datetime_utc = DateTime::<Utc>::from_utc(naive_datetime, Utc);
-                domain_props.expiry_date = Some(datetime_utc.to_rfc3339());
-                domain_props.is_registered = Some(true);
+        if let Some(name) = value_after(line, "Domain:") {
+            domain_props.name = name;
+        } else if let Some(expires) = value_after(line, "Expire Date:") {
+            // TODO: find out what kind of time zone is used by this NIC
+            domain_props.expiry_date = date_to_rfc3339(expires, "%Y-%m-%d");
+            domain_props.is_registered = Some(true);
+        } else if let Some(status) = value_after(line, "Status:") {
+            if status == "ok" {
+                domain_props.status = Some(DomainStatus::Active);
+            } else if status == "AVAILABLE" {
+                domain_props.is_registered = Some(false);
             }
-            continue;
-        }
-
-        // Parse status
-        if line.starts_with("Status: ") {
-            let re = Regex::new(r"Status:\s+(.*)").unwrap();
-            for caps in re.captures_iter(line) {
-                let domain_status_value = caps.get(1).unwrap().as_str();
-                if domain_status_value == "ok" {
-                    domain_props.status = Some(DomainStatus::Active);
-                } else if domain_status_value == "AVAILABLE" {
-                    domain_props.is_registered = Some(false);
-                }
-            }
-            continue;
         }
     }
 

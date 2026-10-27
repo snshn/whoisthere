@@ -3,6 +3,8 @@
 name: CI
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -10,12 +12,14 @@ jobs:
   build_and_test:
 
     strategy:
+      fail-fast: false
       matrix:
         os:
           - ubuntu-latest
           - macos-latest
           - windows-latest
         rust:
+          - "1.85" # MSRV, keep in sync with rust-version in Cargo.toml
           - stable
           - beta
           - nightly
@@ -25,7 +29,12 @@ jobs:
     steps:
     - run: git config --global core.autocrlf false
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+
+    - uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: ${{ matrix.rust }}
+        components: clippy, rustfmt
 
     - name: Build
       run: cargo build --all --locked --verbose
@@ -34,6 +43,8 @@ jobs:
       run: cargo test --all --locked --verbose
 
     - name: Check code formatting
-      run: |
-        rustup component add rustfmt
-        cargo fmt --all -- --check
+      run: cargo fmt --all -- --check
+
+    - name: Lint
+      if: matrix.rust == 'stable'
+      run: cargo clippy --all-targets --locked -- -D warnings

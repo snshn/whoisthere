@@ -7,21 +7,56 @@ Rust crate for parsing WHOIS domain info
 
 
 ## Usage
+
 ```rust
-use whoisthere::parse_domain_whois_info;
+use whoisthere::{DomainStatus, WhoisService, parse_domain_whois_info};
 
-let domain_name: &str = "somesite.co.uk";
-let whois_response_file_path_string: String = format!("tests/_data_/{}.txt", &domain_name);
-let whois_response_file_path: &Path = Path::new(&whois_response_file_path_string);
-let whois_response: String = fs::read_to_string(whois_response_file_path.as_os_str())
-    .expect("Something went wrong reading the file");
-let domain_info = parse_domain_whois_info(domain_name, &whois_response);
+// Raw response from the registry's WHOIS server (e.g. `whois example.co.uk`)
+let whois_response = "
+    Domain name:
+        example.co.uk
 
-assert_eq!(domain_info.domain_name, "somesite.co.uk");
-assert_eq!(domain_info.expiry_date, Some("2022-05-14T00:00:00Z"));
-assert_eq!(domain_info.registrar, Some("Paragon Internet Group Ltd t/a Tsohost [Tag = UKWEBHOSTING]"));
-assert_eq!(domain_info.is_registered, Some(true));
+    Registrar:
+        Example Registrar Ltd [Tag = EXAMPLE]
+        URL: https://registrar.example
+
+    Relevant dates:
+        Registered on: 14-May-1998
+        Expiry date:  14-May-2030
+
+    Registration status:
+        Registered until expiry date.
+";
+
+let domain_props =
+    parse_domain_whois_info("example.co.uk", whois_response).expect("unsupported TLD");
+
+assert_eq!(domain_props.name, "example.co.uk");
+assert_eq!(domain_props.whois_service, Some(WhoisService::Nominet));
+assert_eq!(domain_props.is_registered, Some(true));
+assert_eq!(domain_props.expiry_date.as_deref(), Some("2030-05-14T00:00:00+00:00"));
+assert_eq!(domain_props.registrar, Some("Example Registrar Ltd [Tag = EXAMPLE]"));
+assert_eq!(domain_props.status, Some(DomainStatus::Active));
 ```
+
+
+## Supported TLDs
+
+| TLD                                    | WHOIS service |
+|----------------------------------------|---------------|
+| `.co`, `.com`, `.fm`, `.io`, `.social` | ICANN format  |
+| `.edu`                                 | EDUCAUSE      |
+| `.gov`                                 | DOTGOV        |
+| `.il`                                  | ISOC-IL       |
+| `.is`                                  | ISNIC         |
+| `.it`                                  | NIC-IT        |
+| `.jp`                                  | JPRS          |
+| `.kr`                                  | KRNIC         |
+| `.rs`                                  | RNIDS         |
+| `.ru`                                  | TCINET        |
+| `.uk`                                  | Nominet       |
+
+Other TLDs return `Err(WhoIsThereError::UnsupportedTld)`.
 
 
 ---------------------------------------------------

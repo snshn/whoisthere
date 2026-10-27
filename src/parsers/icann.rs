@@ -1,8 +1,6 @@
-// ICANN: .com
+// ICANN: .co, .com, .fm, .io, .social, …
 
-use chrono::{DateTime, Utc};
-use regex::Regex;
-
+use super::util::{between, rfc3339_to_rfc3339, value_after};
 use crate::{DomainProps, DomainStatus, WhoisService};
 
 pub fn parse_icann_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
@@ -11,9 +9,7 @@ pub fn parse_icann_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
         ..Default::default()
     };
 
-    let lines = whois_info.lines();
-
-    for line in lines {
+    for line in whois_info.lines() {
         if line.is_empty() {
             continue;
         }
@@ -22,69 +18,61 @@ pub fn parse_icann_domain_whois_info(whois_info: &str) -> DomainProps<'_> {
             domain_props.is_registered = Some(false);
             break;
         }
-        if line.starts_with("No match for domain \"") && line.ends_with("\".") {
+
+        if let Some(name) = between(line, "No match for domain \"", "\".") {
             domain_props.is_registered = Some(false);
-
-            // Parse domain name while we're here
-            let re = Regex::new(r####"No match for domain "(.*)"."####).unwrap();
-            for caps in re.captures_iter(line) {
-                domain_props.name = caps.get(1).unwrap().as_str();
-            }
-
+            domain_props.name = name;
             break;
         }
 
-        let line_trimmed = line.trim();
+        let line = line.trim();
 
-        if line_trimmed.starts_with("Registry Expiry Date:") {
-            let re = Regex::new(r"Registry Expiry Date:\s+(.*)").unwrap();
-            for caps in re.captures_iter(line_trimmed) {
-                let result = caps.get(1).unwrap().as_str();
-                let datetime_utc = result.parse::<DateTime<Utc>>().unwrap();
-                domain_props.expiry_date = Some(datetime_utc.to_rfc3339());
-                domain_props.is_registered = Some(true);
-            }
+        if let Some(expires) = value_after(line, "Registry Expiry Date:") {
+            domain_props.expiry_date = rfc3339_to_rfc3339(expires);
+            domain_props.is_registered = Some(true);
             continue;
         }
 
-        if line_trimmed.starts_with("Registrar:") {
-            let re = Regex::new(r"Registrar:\s+(.*)").unwrap();
+        if let Some(registrar) = value_after(line, "Registrar:") {
             // TODO: scan following lines, use struct { name, url }
-            for caps in re.captures_iter(line_trimmed) {
-                let result = caps.get(1).unwrap().as_str();
-                domain_props.registrar = Some(result);
-            }
+            domain_props.registrar = Some(registrar);
             continue;
         }
 
-        // Parse domain name
-        if line_trimmed.starts_with("Domain Name: ") {
-            let re = Regex::new(r"Domain Name:\s+(.*)").unwrap();
-            for caps in re.captures_iter(line_trimmed) {
-                domain_props.name = caps.get(1).unwrap().as_str();
-            }
+        if let Some(name) = value_after(line, "Domain Name:") {
+            domain_props.name = name;
+            domain_props.is_registered = Some(true);
             continue;
         }
 
-        // Parse domain status
-        if line_trimmed.starts_with("Domain Status: ") {
-            let re = Regex::new(r"Domain Status:\s+(.*)").unwrap();
-            for caps in re.captures_iter(line_trimmed) {
-                let domain_status_value = caps.get(1).unwrap().as_str();
-                if domain_status_value.starts_with("redemptionPeriod") {
-                    domain_props.status = Some(DomainStatus::ExpiredRedemptionPeriod);
-                } /*else if domain_status_value.starts_with("clientTransferProhibited")
-                {
-                domain_props.status = Some(DomainStatus::Registered);
-                }*/
+        if let Some(status) = value_after(line, "Domain Status:") {
+            // Status values look like "redemptionPeriod https://icann.org/epp#redemptionPeriod"
+            let status = match status.split_whitespace().next() {
+                Some("autoRenewPeriod") => DomainStatus::ExpiredGracePeriod,
+                Some("redemptionPeriod") => DomainStatus::ExpiredRedemptionPeriod,
+                Some("pendingDelete") => DomainStatus::ExpiredPendingDelete,
+                _ => continue,
+            };
+            // Registries list pendingDelete alongside redemptionPeriod during the
+            // redemption grace period, so keep the most specific one
+            if expiry_stage(&status) > domain_props.status.as_ref().map_or(0, expiry_stage) {
+                domain_props.status = Some(status);
             }
-            continue;
-        }
-
-        if domain_props.status.is_none() {
-            domain_props.status = Some(DomainStatus::Active);
         }
     }
 
+    if domain_props.is_registered == Some(true) && domain_props.status.is_none() {
+        domain_props.status = Some(DomainStatus::Active);
+    }
+
     domain_props
+}
+
+fn expiry_stage(status: &DomainStatus) -> u8 {
+    match status {
+        DomainStatus::Active => 0,
+        DomainStatus::ExpiredGracePeriod => 1,
+        DomainStatus::ExpiredPendingDelete => 2,
+        DomainStatus::ExpiredRedemptionPeriod => 3,
+    }
 }

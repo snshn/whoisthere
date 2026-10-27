@@ -17,7 +17,7 @@ format:
 
 format_check:
 	@cargo fmt --all -- --check
-.PHONY: format
+.PHONY: format_check
 
 install:
 	@cargo install --force --locked --path .
@@ -28,7 +28,7 @@ lint:
 .PHONY: lint
 
 lint_check:
-	@cargo clippy --
+	@cargo clippy --all-targets -- -D warnings
 .PHONY: lint_check
 
 test: build
@@ -36,9 +36,9 @@ test: build
 .PHONY: test
 
 uninstall:
-	@cargo uninstall
+	@cargo uninstall whoisthere
 .PHONY: uninstall
 
 update-lock-file:
 	@cargo update
-.PHONY: clean
+.PHONY: update-lock-file
