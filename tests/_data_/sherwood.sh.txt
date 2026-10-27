@@ -1,0 +1,11 @@
+Domain Name: sherwood.sh
+Registry Domain ID: REDACTED
+Registrar WHOIS Server: whois.name.com
+Registrar URL: http://www.name.com
+Updated Date: 2026-04-24T23:11:33Z
+Creation Date: 2026-03-16T00:30:12Z
+Registry Expiry Date: 2027-03-16T00:30:12Z
+Registrar: Name.com, Inc.
+Registrar IANA ID: 625
+Registrar Abuse Contact Email: [email protected]
+Registrar Abuse Contact Phone: +1.7203101849

@@ -1,0 +1,15 @@
+Domain Name: houseoflife.me
+Registry Domain ID: REDACTED
+Registrar WHOIS Server: whois.namecheap.com
+Registrar URL: https://www.namecheap.com/
+Updated Date: 2026-07-14T11:40:17Z
+Creation Date: 2026-07-14T11:40:13Z
+Registry Expiry Date: 2027-07-14T11:40:13Z
+Registrar: NameCheap, Inc.
+Registrar IANA ID: 1068
+Registrar Abuse Contact Email: [email protected]
+Registrar Abuse Contact Phone: +1.9854014545
+Domain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited
+Domain Status: addPeriod https://icann.org/epp#addPeriod
+Registry Registrant ID: REDACTED
+Registrant Name: REDACTED

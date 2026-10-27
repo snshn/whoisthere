@@ -1,0 +1,5 @@
+Creation Date: 2020-04-25T03:33:06Z
+Registry Expiry Date: 2026-04-25T03:33:06Z
+Registrar: GoDaddy.com, LLC
+Registrar IANA ID: 146
+Domain Status: pendingDelete https://icann.org/epp#pendingDelete

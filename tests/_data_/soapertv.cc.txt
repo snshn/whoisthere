@@ -1,0 +1,17 @@
+Domain Name: SOAPERTV.CC
+Registry Domain ID: 209007876_DOMAIN_CC-VRSN
+Registrar WHOIS Server: whois.web.com
+Registrar URL: http://www.networksolutions.com
+Updated Date: 2026-06-06T21:24:15Z
+Creation Date: 2026-06-06T08:06:18Z
+Registry Expiry Date: 2027-06-06T08:06:18Z
+Registrar: Domain Locale, LLC
+Registrar IANA ID: 2338
+Registrar Abuse Contact Email: [email protected]
+Registrar Abuse Contact Phone: +1.8003337680
+Domain Status: ok https://icann.org/epp#ok
+Name Server: NS15.ABOVEDOMAINS.COM
+Name Server: NS16.ABOVEDOMAINS.COM
+DNSSEC: unsigned
+URL of the ICANN Whois Inaccuracy Complaint Form: https://www.icann.org/wicf/
+>>> Last update of WHOIS database: 2026-07-11T17:38:46Z <<<

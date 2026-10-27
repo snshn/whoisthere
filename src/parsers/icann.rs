@@ -1,4 +1,4 @@
-// ICANN: .co, .com, .fm, .io, .social, …
+// ICANN format: gTLDs (.com, .social) and ccTLDs that use it (.ai, .ca, .cc, .co, .fm, .io, .me, .sh, .tv, .us)
 
 use super::util::{between, rfc3339_to_rfc3339, value_after};
 use crate::{DomainProps, DomainStatus, WhoisService};

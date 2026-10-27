@@ -1,0 +1,13 @@
+Domain Name: wayv.ai
+Registry Domain ID: 7d73e7aed08c43d2a8527d950811a358-DONUTS
+Registrar WHOIS Server: https://www.spaceship.com/domains/whois/
+Registrar URL: 
+Updated Date: 2026-07-30T20:36:17Z
+Creation Date: 2026-07-30T20:36:17Z
+Registry Expiry Date: 2028-07-30T20:36:17Z
+Registrar: Spaceship, Inc.
+Registrar IANA ID: 3862
+Registrar Abuse Contact Email: [email protected]
+Registrar Abuse Contact Phone: +1.9854014545
+Domain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited
+Domain Status: addPeriod https://icann.org/epp#addPeriod
