@@ -92,7 +92,10 @@ pub fn parse_domain_whois_info<'t>(
         .ok_or(WhoIsThereError::UnsupportedTld)?;
 
     let parse = match tld.as_str() {
-        "co" | "com" | "fm" | "io" | "social" => parse_icann_domain_whois_info,
+        // gTLDs, plus ccTLDs whose registries use the ICANN format
+        "ai" | "ca" | "cc" | "co" | "com" | "fm" | "io" | "me" | "sh" | "social" | "tv" | "us" => {
+            parse_icann_domain_whois_info
+        }
         "edu" => parse_educause_domain_whois_info,
         "gov" => parse_dotgov_domain_whois_info,
         "il" => parse_isocil_domain_whois_info,

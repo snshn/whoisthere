@@ -1,0 +1,13 @@
+Domain Name: realpix.ca
+Registry Domain ID: 120150492-CIRA
+Registrar WHOIS Server: whois.ca.fury.ca
+Registrar URL: www.hexonet.net
+Updated Date: 2026-07-28T04:06:20Z
+Creation Date: 2026-05-29T04:01:19Z
+Registry Expiry Date: 2028-05-29T04:01:19Z
+Registrar: CENTRALNIC CANADA INC
+Registrar IANA ID: not applicable
+Registrar Abuse Contact Email: [email protected]
+Registrar Abuse Contact Phone: +49.68949396
+Registrar Abuse Contact Phone Ext: 850
+Domain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited

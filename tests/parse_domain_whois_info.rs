@@ -45,6 +45,108 @@ mod passing {
     }
 
     #[test]
+    fn wayv_ai() {
+        let domain_name = "wayv.ai";
+        let whois_response = fixture(domain_name);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response)
+            .expect("TLD should be supported");
+        assert_eq!(domain_props.name, "wayv.ai");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
+        assert_eq!(domain_props.is_registered, Some(true));
+        assert_eq!(
+            domain_props.expiry_date,
+            Some("2028-07-30T20:36:17+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, Some("Spaceship, Inc."));
+        assert_eq!(domain_props.status, Some(DomainStatus::Active));
+    }
+
+    #[test]
+    fn realpix_ca() {
+        let domain_name = "realpix.ca";
+        let whois_response = fixture(domain_name);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response)
+            .expect("TLD should be supported");
+        assert_eq!(domain_props.name, "realpix.ca");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
+        assert_eq!(domain_props.is_registered, Some(true));
+        assert_eq!(
+            domain_props.expiry_date,
+            Some("2028-05-29T04:01:19+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, Some("CENTRALNIC CANADA INC"));
+        assert_eq!(domain_props.status, Some(DomainStatus::Active));
+    }
+
+    #[test]
+    fn soapertv_cc() {
+        let domain_name = "soapertv.cc";
+        let whois_response = fixture(domain_name);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response)
+            .expect("TLD should be supported");
+        assert_eq!(domain_props.name, "SOAPERTV.CC");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
+        assert_eq!(domain_props.is_registered, Some(true));
+        assert_eq!(
+            domain_props.expiry_date,
+            Some("2027-06-06T08:06:18+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, Some("Domain Locale, LLC"));
+        assert_eq!(domain_props.status, Some(DomainStatus::Active));
+    }
+
+    #[test]
+    fn houseoflife_me() {
+        let domain_name = "houseoflife.me";
+        let whois_response = fixture(domain_name);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response)
+            .expect("TLD should be supported");
+        assert_eq!(domain_props.name, "houseoflife.me");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
+        assert_eq!(domain_props.is_registered, Some(true));
+        assert_eq!(
+            domain_props.expiry_date,
+            Some("2027-07-14T11:40:13+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, Some("NameCheap, Inc."));
+        assert_eq!(domain_props.status, Some(DomainStatus::Active));
+    }
+
+    #[test]
+    fn sherwood_sh() {
+        let domain_name = "sherwood.sh";
+        let whois_response = fixture(domain_name);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response)
+            .expect("TLD should be supported");
+        assert_eq!(domain_props.name, "sherwood.sh");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
+        assert_eq!(domain_props.is_registered, Some(true));
+        assert_eq!(
+            domain_props.expiry_date,
+            Some("2027-03-16T00:30:12+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, Some("Name.com, Inc."));
+        assert_eq!(domain_props.status, Some(DomainStatus::Active));
+    }
+
+    #[test]
+    fn viraltv_tv() {
+        let domain_name = "viraltv.tv";
+        let whois_response = fixture(domain_name);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response)
+            .expect("TLD should be supported");
+        assert_eq!(domain_props.name, "viraltv.tv");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
+        assert_eq!(domain_props.is_registered, Some(true));
+        assert_eq!(
+            domain_props.expiry_date,
+            Some("2027-05-15T01:45:26+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, Some("Tucows Domains Inc."));
+        assert_eq!(domain_props.status, Some(DomainStatus::Active));
+    }
+
+    #[test]
     fn crates_io() {
         let domain_name = "crates.io";
         let whois_response = fixture(domain_name);
@@ -363,6 +465,26 @@ mod failing {
             assert_eq!(domain_props.expiry_date, None, "{}", domain_name);
             assert_eq!(domain_props.is_registered, Some(true), "{}", domain_name);
         }
+    }
+
+    #[test]
+    fn get_away_go_go_us() {
+        // Excerpt (no Domain Name line) of a .us domain past its expiry date
+        let domain_name = "get-away-go-go.us";
+        let whois_response = fixture(domain_name);
+        let domain_props = whoisthere::parse_domain_whois_info(domain_name, &whois_response)
+            .expect("TLD should be supported");
+        assert_eq!(domain_props.whois_service, Some(WhoisService::Icann));
+        assert_eq!(domain_props.is_registered, Some(true));
+        assert_eq!(
+            domain_props.expiry_date,
+            Some("2026-04-25T03:33:06+00:00".to_string())
+        );
+        assert_eq!(domain_props.registrar, Some("GoDaddy.com, LLC"));
+        assert_eq!(
+            domain_props.status,
+            Some(DomainStatus::ExpiredPendingDelete)
+        );
     }
 
     #[test]

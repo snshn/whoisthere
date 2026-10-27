@@ -42,19 +42,19 @@ assert_eq!(domain_props.status, Some(DomainStatus::Active));
 
 ## Supported TLDs
 
-| TLD                                    | WHOIS service |
-|----------------------------------------|---------------|
-| `.co`, `.com`, `.fm`, `.io`, `.social` | ICANN format  |
-| `.edu`                                 | EDUCAUSE      |
-| `.gov`                                 | DOTGOV        |
-| `.il`                                  | ISOC-IL       |
-| `.is`                                  | ISNIC         |
-| `.it`                                  | NIC-IT        |
-| `.jp`                                  | JPRS          |
-| `.kr`                                  | KRNIC         |
-| `.rs`                                  | RNIDS         |
-| `.ru`                                  | TCINET        |
-| `.uk`                                  | Nominet       |
+| TLD                                                                                     | WHOIS service |
+|-----------------------------------------------------------------------------------------|---------------|
+| `.ai`, `.ca`, `.cc`, `.co`, `.com`, `.fm`, `.io`, `.me`, `.sh`, `.social`, `.tv`, `.us` | ICANN format  |
+| `.edu`                                                                                  | EDUCAUSE      |
+| `.gov`                                                                                  | DOTGOV        |
+| `.il`                                                                                   | ISOC-IL       |
+| `.is`                                                                                   | ISNIC         |
+| `.it`                                                                                   | NIC-IT        |
+| `.jp`                                                                                   | JPRS          |
+| `.kr`                                                                                   | KRNIC         |
+| `.rs`                                                                                   | RNIDS         |
+| `.ru`                                                                                   | TCINET        |
+| `.uk`                                                                                   | Nominet       |
 
 Other TLDs return `Err(WhoIsThereError::UnsupportedTld)`.
 
